@@ -1,22 +1,27 @@
 package org.hammerlab.shapeless
 
-import org.hammerlab.shapeless.Flattened.Ops
+import org.hammerlab.shapeless.Flatten.Ops
 import shapeless._
 import shapeless.ops.hlist.Prepend
 
-trait Flattened[L]
+/**
+ * Type-class that computes a recursively-flattened [[HList]] `F` for an input type [[In]].
+ *
+ * Case-classes and [[HList]]s are expanded.
+ */
+trait Flatten[In]
   extends Serializable {
-  type F <: HList
-  def apply(l: L): F
+  type Out <: HList
+  def apply(l: In): Out
 }
 
 trait LowestPri {
-  type Aux[L, F0] = Flattened[L] { type F = F0 }
+  type Aux[In, Out0] = Flatten[In] { type Out = Out0 }
 
-  def make[L, F0 <: HList](fn: L ⇒ F0): Aux[L, F0] =
-    new Flattened[L] {
-      type F = F0
-      override def apply(l: L) = fn(l)
+  def make[In, Out0 <: HList](fn: In ⇒ Out0): Aux[In, Out0] =
+    new Flatten[In] {
+      type Out = Out0
+      override def apply(l: In) = fn(l)
     }
 
   // Put anything with HNil, if nothing else matches
@@ -33,11 +38,11 @@ trait LowPriFlattenedImplicits extends LowestPri {
     )
 }
 
-object Flattened
+object Flatten
   extends LowPriFlattenedImplicits
     with HasFlattenedOps {
 
-  def apply[L](implicit flat: Flattened[L]): Aux[L, flat.F] = flat
+  def apply[In](implicit flat: Flatten[In]): Aux[In, flat.Out] = flat
 
   implicit val hnil: Aux[HNil, HNil] = make(l ⇒ l)
 
@@ -86,7 +91,7 @@ object Flattened
     )
 
   class Ops[T](val t: T) extends AnyVal {
-    def flatten(implicit f: Flattened[T]): f.F = f(t)
+    def flatten(implicit f: Flatten[T]): f.Out = f(t)
   }
 }
 

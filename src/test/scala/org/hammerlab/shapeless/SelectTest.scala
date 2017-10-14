@@ -12,18 +12,22 @@ class SelectTest
 
   test("direct access") {
     implicitly[Select[Foo, A2]].apply(foo) should be(new A2(123))
+    implicitly[Select[Foo, B2]].apply(foo) should be(new B2("abc"))
   }
 
   test("covariant access") {
     implicitly[Select[Foo, A]].apply(foo) should be(A(123))
+    implicitly[Select[Foo, B]].apply(foo) should be(B("abc"))
   }
 
   test("direct syntax") {
     foo.iselect[A2] should be(new A2(123))
+    foo.iselect[B2] should be(new B2("abc"))
   }
 
   test("covariant syntax") {
     foo.iselect[A] should be(A(123))
+    foo.iselect[B] should be(B("abc"))
   }
 }
 
