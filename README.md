@@ -21,12 +21,14 @@ case class B(s: String)
 case class C(a: A, b: B)
 case class D(b: Boolean)
 case class E(c: C, d: D, a: A, a2: A)
+case class F(e: E)
 
 val a = A(123)
 val b = B("abc")
 val c = C(a, b)
 val d = D(true)
 val e = E(c, d, A(456), A(789))
+val f = F(e)
 ```
 
 Import syntax:
@@ -80,4 +82,11 @@ e.find('a2)  // A(789)
 
 e.find('a)   // doesn't compile: E.c.a and E.a both match
 e.find('n)   // doesn't compile: E.a.n, E.a2.n, and E.c.a.n both match
+```
+
+### `field`: find field by name and type
+
+```scala
+e.field[Boolean]('b)  // true
+e.field[B]('b)        // B("abc")
 ```
