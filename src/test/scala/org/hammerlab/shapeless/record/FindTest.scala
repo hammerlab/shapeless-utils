@@ -31,11 +31,20 @@ class FindTest
     Find[E, W.`'d`.T].apply(e) should be(e.d)
     Find[E, W.`'s`.T].apply(e) should be(e.c.b.s)
 
+    Find.Aux[lga.Repr, W.`'n`.T, Int].apply(lga.to(aa)) should be(aa.n)
+    shapeless.the[Find.Aux[lga.Repr, W.`'n`.T, String]].apply(lga.to(aa)) should be(aa.n)
+
+    Find.Aux[A, W.`'n`.T, Int].apply(aa) should be(aa.n)
+    shapeless.the[Find.Aux[A, W.`'n`.T, String]].apply(aa) should be(aa.n)
+
+    Find.Aux[B, W.`'s`.T, String].apply(b) should be(b.s)
+    shapeless.the[Find.Aux[B, W.`'s`.T, String]].apply(b) should be(b.s)
+
     Find.Aux[C, W.`'s`.T, String].apply(c) should be(c.b.s)
-    implicitly[Find.Aux[C, W.`'s`.T, String]].apply(c) should be(c.b.s)
+    shapeless.the[Find.Aux[C, W.`'s`.T, String]].apply(c) should be(c.b.s)
 
     Find.Aux[E, W.`'s`.T, String].apply(c) should be(e.c.b.s)
-    implicitly[Find.Aux[E, W.`'s`.T, String]].apply(c) should be(e.c.b.s)
+    shapeless.the[Find.Aux[E, W.`'s`.T, String]].apply(c) should be(e.c.b.s)
   }
 
   test("ops") {

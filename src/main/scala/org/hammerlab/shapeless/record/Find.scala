@@ -65,8 +65,8 @@ object Find
   def Aux[C, K, V](implicit find: Find.Aux[C, K, V]): Aux[C, K, V] = find
 
   /** Bridge a case-class to its [[LabelledGeneric]] */
-  implicit def fromCC[CC, L <: HList, K](implicit gen: LabelledGeneric.Aux[CC, L], find: Find[L, K]): Aux[CC, K, find.V] =
-    make(cc ⇒ find(gen.to(cc)))
+  implicit def fromCC[CC, L <: HList, K](implicit gen: LabelledGeneric.Aux[CC, L], find: Lazy[Find[L, K]]): Aux[CC, K, find.value.V] =
+    make(cc ⇒ find.value(gen.to(cc)))
 
   /** Recurse from a case-class to any of its fields, via its [[Generic]] */
 //  implicit def fromCCRec[CC, L <: HList, K](implicit gen: Generic.Aux[CC, L], find: Find[L, K]): Aux[CC, K, find.V] =
