@@ -11,56 +11,48 @@ class FindTest
   import Utils._
 
   test("summon") {
-    Selector[lga.Repr, W.`'n`.T].apply(lga.to(aa)) should be(aa.n)
+    Find[lga.Repr, W.`'n`.T, Int].apply(lga.to(aa)) should be(aa.n)
 
-    Find[lga.Repr, W.`'n`.T]
-    Find[lga.Repr, W.`'n`.T].apply(lga.to(aa)) should be(aa.n)
-    Find[A, W.`'n`.T].apply(aa) should be(aa.n)
+    Find[A, W.`'n`.T, Int].apply(aa) should be(aa.n)
 
-    Find[C, W.`'a`.T].apply(c) should be(c.a)
-    Find[C, W.`'b`.T].apply(c) should be(c.b)
+    Find[B, W.`'s`.T, String].apply(b) should be(b.s)
 
-    Find[C, W.`'n`.T].apply(c) should be(c.a.n)
-    Find[C, W.`'s`.T].apply(c) should be(c.b.s)
+    Find[C, W.`'a`.T, A].apply(c) should be(c.a)
+    Find[C, W.`'b`.T, B].apply(c) should be(c.b)
 
-    Find[D, W.`'b`.T].apply(d) should be(d.b)
+    Find[C, W.`'n`.T, Int].apply(c) should be(c.a.n)
+    Find[C, W.`'s`.T, String].apply(c) should be(c.b.s)
 
-    Find[E, W.`'c`.T].apply(e) should be(e.c)
-    Find[E, W.`'a2`.T].apply(e) should be(e.a2)
-    Find[E, W.`'b`.T].apply(e) should be(e.c.b)
-    Find[E, W.`'d`.T].apply(e) should be(e.d)
-    Find[E, W.`'s`.T].apply(e) should be(e.c.b.s)
+    Find[E, W.`'a2`.T, A].apply(e) should be(e.a2)
+    Find[E, W.`'c`.T, C].apply(e) should be(e.c)
+    Find[E, W.`'d`.T, D].apply(e) should be(e.d)
 
-    Find.Aux[lga.Repr, W.`'n`.T, Int].apply(lga.to(aa)) should be(aa.n)
-    shapeless.the[Find.Aux[lga.Repr, W.`'n`.T, String]].apply(lga.to(aa)) should be(aa.n)
+    Find[E, W.`'b`.T, B].apply(e) should be(e.c.b)
+    Find[E, W.`'b`.T, Boolean].apply(e) should be(e.d.b)
 
-    Find.Aux[A, W.`'n`.T, Int].apply(aa) should be(aa.n)
-    shapeless.the[Find.Aux[A, W.`'n`.T, String]].apply(aa) should be(aa.n)
-
-    Find.Aux[B, W.`'s`.T, String].apply(b) should be(b.s)
-    shapeless.the[Find.Aux[B, W.`'s`.T, String]].apply(b) should be(b.s)
-
-    Find.Aux[C, W.`'s`.T, String].apply(c) should be(c.b.s)
-    shapeless.the[Find.Aux[C, W.`'s`.T, String]].apply(c) should be(c.b.s)
-
-    Find.Aux[E, W.`'s`.T, String].apply(c) should be(e.c.b.s)
-    shapeless.the[Find.Aux[E, W.`'s`.T, String]].apply(c) should be(e.c.b.s)
+    Find[E, W.`'s`.T, String].apply(e) should be(e.c.b.s)
   }
 
   test("ops") {
-    aa.find('n) should be(aa.n)
+    aa.find[Int]('n) should be(aa.n)
 
-    b.find('s) should be(b.s)
+    b.find[String]('s) should be(b.s)
 
-    c.find('n) should be(aa.n)
-    c.find('s) should be(b.s)
+    c.find[A]('a) should be(aa)
+    c.find[B]('b) should be(b)
 
-    d.find('b) should be(d.b)
+    c.find[Int]('n) should be(aa.n)
+    c.find[String]('s) should be(b.s)
 
-    e.find('b) should be(b)
-    e.find('c) should be(c)
-    e.find('d) should be(d)
-    e.find('s) should be(b.s)
-    e.find('a2) should be(e.a2)
+    d.find[Boolean]('b) should be(d.b)
+
+    e.find[A]('a2) should be(e.a2)  // unique name, non-unique type
+    e.find[C]('c) should be(e.c)
+    e.find[D]('d) should be(e.d)
+
+    e.find[B]('b) should be(e.c.b)        // unique type, non-unique name
+    e.find[Boolean]('b) should be(e.d.b)  // unique type, non-unique name
+
+    e.find[String]('s) should be(e.c.b.s)
   }
 }

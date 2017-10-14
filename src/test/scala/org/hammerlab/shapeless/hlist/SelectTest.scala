@@ -36,4 +36,3 @@ object SelectTest {
   class B2(t: String) extends B(t)
   case class Foo(a: A2, b: B2)
 }
-
