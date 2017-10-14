@@ -6,6 +6,20 @@ import shapeless.ops.record.Selector
 
 /**
  * Type-class for recursively selecting a field [[K]] in an object [[C]]
+ *
+ * Example:
+ *
+ * {{{
+ * case class A(n: Int)
+ * case class B(s: String)
+ * case class C(a: A, b: B)
+ * val c = C(A(123), B("abc"))
+ * c.find('a)  // A(123)
+ * c.find('b)  // B("abc")
+ * c.find('n)  // 123
+ * c.find('s)  // "abc"
+ * c.find('x)  // doesn't compile
+ * }}}
  */
 trait Find[C, K] {
   type V
@@ -58,5 +72,5 @@ object Find
 }
 
 trait HasFindOps {
-  implicit def makeFindOps[T](t: T): Ops[T] = new Ops(t)
+  implicit def makeRecordFindOps[T](t: T): Ops[T] = new Ops(t)
 }

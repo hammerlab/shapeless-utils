@@ -4,28 +4,12 @@ import org.hammerlab.shapeless.Utils
 import org.hammerlab.test.Suite
 import shapeless._
 import shapeless.ops.record.Selector
+import org.hammerlab.shapeless._
 
 class FindTest
   extends Suite {
 
   import Utils._
-
-  Selector[lga.Repr, Witness.`'n`.T]
-  Selector[lgb.Repr, Witness.`'s`.T]
-
-  implicitly[Find[A, Witness.`'n`.T]]
-  implicitly[Find.Aux[A, Witness.`'n`.T, Int]]
-
-
-  Find[B, Witness.`'s`.T]
-
-  Find[C, Witness.`'a`.T]
-
-  Find[lgc.Repr, Witness.`'b`.T]
-  Find[C, Witness.`'b`.T]
-
-  Find[C, Witness.`'n`.T]
-  Find[C, Witness.`'s`.T]
 
   test("summon") {
     Selector[lga.Repr, Witness.`'n`.T].apply(lga.to(aa)) should be(aa.n)
@@ -41,8 +25,6 @@ class FindTest
   }
 
   test("ops") {
-    import Find.makeFindOps
-
     aa.find('n) should be(aa.n)
 
     b.find('s) should be(b.s)
@@ -56,5 +38,6 @@ class FindTest
     e.find('c) should be(c)
     e.find('d) should be(d)
     e.find('s) should be(b.s)
+    e.find('a2) should be(e.a2)
   }
 }

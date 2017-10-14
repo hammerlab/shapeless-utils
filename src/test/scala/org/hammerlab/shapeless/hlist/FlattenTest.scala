@@ -13,7 +13,7 @@ class FlattenTest
     implicitly[Flatten[B]].apply(b) should be("abc" :: ⊥)
     implicitly[Flatten[C]].apply(c) should be(123 :: "abc" :: ⊥)
     implicitly[Flatten[D]].apply(d) should be(true :: ⊥)
-    implicitly[Flatten[E]].apply(e) should be(123 :: "abc" :: true :: 456 :: ⊥)
+    implicitly[Flatten[E]].apply(e) should be(123 :: "abc" :: true :: 456 :: 789 :: ⊥)
 
     implicitly[Flatten[String]].apply("abc") should be("abc" :: ⊥)
 
@@ -64,7 +64,7 @@ class FlattenTest
     b.flatten should be("abc" :: ⊥)
     c.flatten should be(123 :: "abc" :: ⊥)
     d.flatten should be(true :: ⊥)
-    e.flatten should be(123 :: "abc" :: true :: 456 :: ⊥)
+    e.flatten should be(123 :: "abc" :: true :: 456 :: 789 :: ⊥)
 
     compound.flatten should be(flattenedCompound)
   }
