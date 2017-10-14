@@ -1,5 +1,6 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.record
 
+import org.hammerlab.shapeless.Utils
 import org.hammerlab.test.Suite
 import shapeless._
 import shapeless.ops.record.Selector

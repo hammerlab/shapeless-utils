@@ -1,8 +1,9 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.hlist
 
+import org.hammerlab.shapeless.Utils.{ A, B, C, D, E, aa, b, c, d, e }
+import org.hammerlab.shapeless.⊥
 import org.hammerlab.test.Suite
 import shapeless._
-import Utils._
 
 class FlattenTest
   extends Suite {

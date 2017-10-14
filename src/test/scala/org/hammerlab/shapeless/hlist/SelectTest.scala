@@ -1,7 +1,7 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.hlist
 
+import org.hammerlab.shapeless.Utils.{ A, B }
 import org.hammerlab.test.Suite
-import Utils._
 
 class SelectTest
   extends Suite {

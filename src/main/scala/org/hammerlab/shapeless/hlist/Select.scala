@@ -1,6 +1,6 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless.Select.Ops
+import org.hammerlab.shapeless.hlist.Select.Ops
 import shapeless._
 
 /**

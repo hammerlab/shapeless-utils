@@ -1,6 +1,6 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless.Flatten.Ops
+import org.hammerlab.shapeless.hlist.Flatten.Ops
 import shapeless._
 import shapeless.ops.hlist.Prepend
 
