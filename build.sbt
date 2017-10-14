@@ -1,5 +1,3 @@
-name := "shapeless"
+name := "shapeless-utils"
 version := "1.0.0-SNAPSHOT"
-deps ++= Seq(
-  shapeless
-)
+deps += shapeless
