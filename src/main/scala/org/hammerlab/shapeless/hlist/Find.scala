@@ -17,18 +17,18 @@ trait LowestPriFind {
 
   implicit def cc[CC, L <: HList, F](implicit
                                      gen: Generic.Aux[CC, L],
-                                     find: Find[L, F]
+                                     find: Lazy[Find[L, F]]
                                     ): Find[CC, F] =
-    make(cc ⇒ find(gen.to(cc)))
+    make(cc ⇒ find.value(gen.to(cc)))
 
   /** Low-priority: [[K]] exists in [[::.tail]]; prepend arbitrary element "for free". */
-  implicit def cons[H, T <: HList, K](implicit find: Find[T, K]): Find[H :: T, K] = make(l ⇒ find(l.tail))
+  implicit def cons[H, T <: HList, K](implicit find: Lazy[Find[T, K]]): Find[H :: T, K] = make(l ⇒ find.value(l.tail))
 }
 
 trait LowPriFind extends LowestPriFind {
   /** Medium-priority: [[K]] can be found within [[::.head]] [[H]]; find it there instead of within [[::.tail]] [[T]] */
-  implicit def headRecurse[H, T <: HList, K](implicit find: Find[H, K]): Find[H :: T, K] =
-    make(l ⇒ find(l.head))
+  implicit def headRecurse[H, T <: HList, K](implicit find: Lazy[Find[H, K]]): Find[H :: T, K] =
+    make(l ⇒ find.value(l.head))
 }
 
 object Find extends LowPriFind {

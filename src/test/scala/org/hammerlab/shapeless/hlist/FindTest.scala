@@ -2,6 +2,7 @@ package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.test.Suite
 import org.hammerlab.shapeless.Utils._
+import shapeless.Generic
 
 class FindTest
   extends Suite {
@@ -22,6 +23,13 @@ class FindTest
     implicitly[Find[E, D]].apply(e) should be(e.d)
     implicitly[Find[E, Boolean]].apply(e) should be(e.d.b)
     implicitly[Find[E, String]].apply(e) should be(e.c.b.s)
+
+    implicitly[Find[F, E]].apply(f) should be(f.e)
+    implicitly[Find[F, B]].apply(f) should be(f.e.c.b)
+    implicitly[Find[F, C]].apply(f) should be(f.e.c)
+    implicitly[Find[F, D]].apply(f) should be(f.e.d)
+    implicitly[Find[F, Boolean]].apply(f) should be(f.e.d.b)
+    implicitly[Find[F, String]].apply(f) should be(f.e.c.b.s)
   }
 
   test("ops") {
@@ -40,5 +48,12 @@ class FindTest
     e.findt[D] should be(e.d)
     e.findt[Boolean] should be(e.d.b)
     e.findt[String] should be(e.c.b.s)
+
+    f.findt[E] should be(f.e)
+    f.findt[B] should be(f.e.c.b)
+    f.findt[C] should be(f.e.c)
+    f.findt[D] should be(f.e.d)
+    f.findt[Boolean] should be(f.e.d.b)
+    f.findt[String] should be(f.e.c.b.s)
   }
 }
