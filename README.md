@@ -5,7 +5,7 @@ shapeless-style type-classes for structural manipulation of algebraic data types
 [![Coverage Status](https://coveralls.io/repos/github/hammerlab/shapeless-utils/badge.svg?branch=master)](https://coveralls.io/github/hammerlab/shapeless-utils?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.hammerlab/shapeless-utils_2.11.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Corg.hammerlab%20shapeless-utils)
 
-- `Find`: recursively find fields by type or name
+- `Find`: recursively find fields by type and/or name
   - [`hlist.Find`](src/main/scala/org/hammerlab/shapeless/hlist/Find.scala): recursively find field by type
   - [`record.Find`](src/main/scala/org/hammerlab/shapeless/record/Find.scala): recursively find field by name
   - [`record.Field`](src/main/scala/org/hammerlab/shapeless/record/Field.scala): recursively find field by name and type
