@@ -2,7 +2,7 @@ package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.test.Suite
 import org.hammerlab.shapeless.Utils._
-import shapeless.Generic
+import org.hammerlab.shapeless._
 
 class FindTest
   extends Suite {
@@ -55,5 +55,16 @@ class FindTest
     f.findt[D] should be(f.e.d)
     f.findt[Boolean] should be(f.e.d.b)
     f.findt[String] should be(f.e.c.b.s)
+  }
+
+  test("stand-alone findt") {
+    implicit val _f = f
+
+    findt[F, E] should be(f.e)
+    findt[F, B] should be(f.e.c.b)
+    findt[F, C] should be(f.e.c)
+    findt[F, D] should be(f.e.d)
+    findt[F, Boolean] should be(f.e.d.b)
+    findt[F, String] should be(f.e.c.b.s)
   }
 }

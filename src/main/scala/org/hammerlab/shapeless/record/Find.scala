@@ -25,7 +25,8 @@ import shapeless.labelled.FieldType
  * c.find[Int]('s)     // doesn't compile
  * }}}
  */
-trait Find[C, K <: Symbol, V] {
+trait Find[C, K <: Symbol, V]
+  extends Serializable {
   def apply(c: C): V
 }
 

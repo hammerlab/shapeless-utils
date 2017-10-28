@@ -6,7 +6,8 @@ import shapeless._
 /**
  * Port of [[shapeless.ops.hlist.Selector]] that supports selecting a field by querying for a super-type
  */
-trait Select[L, +U] extends Serializable {
+trait Select[L, +U]
+  extends Serializable {
   def apply(l: L): U
 }
 
