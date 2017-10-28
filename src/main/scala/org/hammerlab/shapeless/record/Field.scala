@@ -23,7 +23,8 @@ import shapeless.ops.record.Selector
  * c.field('x)  // doesn't compile
  * }}}
  */
-trait Field[C, K] {
+trait Field[C, K]
+  extends Serializable {
   type V
   def apply(c: C): V
 }
@@ -54,14 +55,19 @@ object Field
   def Aux[C, K, V](implicit find: Field.Aux[C, K, V]): Aux[C, K, V] = find
 
   /** Bridge a case-class to its [[LabelledGeneric]] */
-  implicit def fromCC[CC, L <: HList, K](implicit gen: LabelledGeneric.Aux[CC, L], find: Lazy[Field[L, K]]): Aux[CC, K, find.value.V] =
+  implicit def fromCC[CC, L <: HList, K](implicit
+                                         gen: LabelledGeneric.Aux[CC, L],
+                                         find: Lazy[Field[L, K]]): Aux[CC, K, find.value.V] =
     make(cc ⇒ find.value(gen.to(cc)))
 
   /** Convert a [[Selector]] to a [[Field]] */
   implicit def fromSelector[C <: HList, K](implicit sl: Selector[C, K]): Aux[C, K, sl.Out] =
     make(sl(_))
 
-  implicit def fromCCRec[CC, L <: HList, K](implicit gen: Generic.Aux[CC, L], find: Lazy[Field[L, K]]): Aux[CC, K, find.value.V] =
+  implicit def fromCCRec[CC, L <: HList, K](implicit
+                                            gen: Generic.Aux[CC, L],
+                                            find: Lazy[Field[L, K]]
+                                           ): Aux[CC, K, find.value.V] =
     make(cc ⇒ find.value(gen.to(cc)))
 
   /** Construct a [[Field]] by prepending an existing [[Field]] onto any [[HList]] */

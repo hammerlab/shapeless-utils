@@ -3,8 +3,9 @@ package org.hammerlab.shapeless.hlist
 import org.hammerlab.shapeless.hlist.Find.Ops
 import shapeless._
 
-trait Find[C, F] extends Serializable {
-  def apply(c: C): F
+trait Find[C, F]
+  extends Serializable {
+  def apply(implicit c: C): F
 }
 
 trait LowestPriFind {
@@ -12,7 +13,7 @@ trait LowestPriFind {
 
   def make[C, F](fn: C ⇒ F): Find[C, F] =
     new Find[C, F] {
-      override def apply(c: C) = fn(c)
+      def apply(implicit c: C) = fn(c)
     }
 
   implicit def cc[CC, L <: HList, F](implicit
@@ -32,8 +33,9 @@ trait LowPriFind extends LowestPriFind {
 }
 
 object Find extends LowPriFind {
-  /** Highest-priority: [[::.head]] is the type we seek; return it */
-  implicit def foundHead[H, T <: HList]: Find[H :: T, H] = make(_.head)
+  /** Highest-priority: if a list begins with the type we seek; return it */
+  implicit def foundHeadCons[E, H, T <: HList](implicit prev: Find[E :: T, E]): Find[E :: H :: T, E] = make(_.head)
+  implicit def foundHeadEnd[H]: Find[H :: HNil, H] = make(_.head)
 
   class Ops[T](val t: T) extends AnyVal {
     def findt[K](implicit f: Find[T, K]): K = f(t)
@@ -42,4 +44,5 @@ object Find extends LowPriFind {
 
 trait HasFindOps {
   implicit def makeHListFindOps[T](t: T): Ops[T] = new Ops(t)
+  def findt[C, F](implicit find: Find[C, F], c: C): F = find(c)
 }
