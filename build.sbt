@@ -1,4 +1,4 @@
 name := "shapeless-utils"
-version := "1.1.0"
-deps += shapeless
+r"1.1.0"
+dep(shapeless)
 addScala212
