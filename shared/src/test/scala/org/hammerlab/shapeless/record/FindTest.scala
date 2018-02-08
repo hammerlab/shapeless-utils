@@ -1,7 +1,7 @@
 package org.hammerlab.shapeless.record
 
 import org.hammerlab.shapeless._
-import org.hammerlab.test.Suite
+import org.hammerlab.Suite
 import shapeless.{ Witness ⇒ W }
 
 class FindTest

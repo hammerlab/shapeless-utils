@@ -1,7 +1,7 @@
 package org.hammerlab.shapeless.coproduct
 
 import hammerlab.shapeless._
-import org.hammerlab.test.Suite
+import org.hammerlab.Suite
 
 object SingletonTest {
 

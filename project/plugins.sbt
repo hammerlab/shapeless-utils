@@ -1,1 +1,1 @@
-addSbtPlugin("org.hammerlab.sbt" % "base" % "4.1.0")
+addSbtPlugin("org.hammerlab.sbt" % "base" % "4.3.0-SNAPSHOT")

@@ -2,7 +2,7 @@ package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.shapeless.Utils._
 import org.hammerlab.shapeless.⊥
-import org.hammerlab.test.Suite
+import org.hammerlab.Suite
 import shapeless._
 
 class FlattenTest

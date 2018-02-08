@@ -1,6 +1,6 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.test.Suite
+import org.hammerlab.Suite
 import org.hammerlab.shapeless.Utils._
 import org.hammerlab.shapeless._
 
