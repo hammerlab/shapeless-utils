@@ -1,13 +1,10 @@
 package org.hammerlab.shapeless.record
 
-import org.hammerlab.shapeless.Utils
-import org.hammerlab.Suite
+import org.hammerlab.shapeless.Suite
 import shapeless.{ Witness ⇒ W }
 
 class FieldTest
   extends Suite {
-
-  import Utils._
 
   test("summon") {
     Field[lga.Repr, W.`'n`.T].apply(lga.to(aa)) should be(aa.n)

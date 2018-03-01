@@ -1,13 +1,10 @@
 package org.hammerlab.shapeless.record
 
 import org.hammerlab.shapeless._
-import org.hammerlab.Suite
 import shapeless.{ Witness ⇒ W }
 
 class FindTest
   extends Suite {
-
-  import Utils._
 
   test("summon") {
     Find[lga.Repr, W.`'n`.T, Int].apply(lga.to(aa)) should be(aa.n)

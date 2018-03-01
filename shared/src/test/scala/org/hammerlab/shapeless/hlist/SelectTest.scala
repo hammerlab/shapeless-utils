@@ -1,12 +1,9 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless.Utils.{ A, B }
-import org.hammerlab.Suite
+import org.hammerlab.shapeless.Suite
 
 class SelectTest
   extends Suite {
-
-  import SelectTest._
 
   val foo = Foo(new A2(123), new B2("abc"))
 
@@ -29,9 +26,7 @@ class SelectTest
     foo.iselect[A] should be(A(123))
     foo.iselect[B] should be(B("abc"))
   }
-}
 
-object SelectTest {
   class A2(m: Int) extends A(m)
   class B2(t: String) extends B(t)
   case class Foo(a: A2, b: B2)
