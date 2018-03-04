@@ -1,6 +1,6 @@
 package org.hammerlab.shapeless.coproduct
 
-import org.hammerlab.test.Suite
+import org.hammerlab.Suite
 
 object CastTest {
   sealed trait X

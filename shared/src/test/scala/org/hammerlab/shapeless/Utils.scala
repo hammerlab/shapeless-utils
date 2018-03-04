@@ -2,7 +2,7 @@ package org.hammerlab.shapeless
 
 import shapeless.LabelledGeneric
 
-object Utils {
+trait Utils {
   case class A(n: Int)
   case class B(s: String)
   case class C(a: A, b: B)
@@ -21,3 +21,5 @@ object Utils {
   val lgb = LabelledGeneric[B]
   val lgc = LabelledGeneric[C]
 }
+
+object Utils extends Utils
