@@ -7,6 +7,9 @@ scala:
   - 2.11.12
   - 2.12.4
 
+env:
+  - SBT_OPTS="-Xmx2g -verbose:gc"
+
 script: sbt ++$TRAVIS_SCALA_VERSION clean coverageTest
 
 cache:
