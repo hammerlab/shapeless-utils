@@ -23,19 +23,26 @@ trait LowestPri {
       type Out = Out0
       override def apply(l: In) = fn(l)
     }
-
-  // Put anything with HNil, if nothing else matches
-  implicit def directSingle[H]: Aux[H, H :: HNil] = make(_ :: HNil)
 }
 
 trait LowPriFlattenedImplicits extends LowestPri {
   // prepend an element directly if it can't be flattened further (via higher-priority implicits below)
-  implicit def directCons[H, T <: HList, FT <: HList](implicit flatT: Aux[T, FT]): Aux[H :: T, H :: FT] =
-    make(
-      l ⇒
-        l.head ::
-          flatT(l.tail)
-    )
+  implicit def directCons[
+     H,
+     T <: HList,
+    FT <: HList
+  ](
+    implicit
+    ft: Lazy[Aux[T, FT]]
+  ):
+    Aux[
+      H ::  T,
+      H :: FT
+    ] =
+    make {
+      case h :: t ⇒
+           h :: ft.value(t)
+    }
 }
 
 object Flatten
@@ -46,46 +53,40 @@ object Flatten
 
   implicit val hnil: Aux[HNil, HNil] = make(l ⇒ l)
 
-  // Flatten and prepend an HList
-  implicit def nestedCons[H <: HList, FH <: HList, T <: HList, FT <: HList, Out <: HList](
-      implicit
-      flatH: Aux[H, FH],
-      flatT: Aux[T, FT],
-      concat: Prepend.Aux[FH, FT, Out]
-  ): Aux[H :: T, Out] =
-    make(
-      l ⇒
-        concat(
-          flatH(l.head),
-          flatT(l.tail)
-        )
-    )
-
   // Flatten and prepend a Product (e.g. case-class)
-  implicit def nestedCCCons[H <: Product, HL <: HList, FH <: HList, T <: HList, FT <: HList, Out <: HList](
-      implicit
-      gen: Generic.Aux[H, HL],
-      flatH: Aux[HL, FH],
-      flatT: Aux[T, FT],
-      concat: Prepend.Aux[FH, FT, Out]
+  implicit def nestedCCCons[
+      H <: Product,
+     FH <: HList,
+      T <: HList,
+     FT <: HList,
+    Out <: HList
+  ](
+    implicit
+    fh : Lazy[Aux[H, FH]],
+    ft : Lazy[Aux[T, FT]],
+    ++ : Prepend.Aux[FH, FT, Out]
   ): Aux[H :: T, Out] =
-    make(
-      l ⇒
-        concat(
-          flatH(gen.to(l.head)),
-          flatT(l.tail)
+    make {
+      case h :: t ⇒
+        ++(
+          fh.value(h),
+          ft.value(t)
         )
-    )
+    }
 
   // Flatten a case-class directly
-  implicit def cc[CC <: Product, L <: HList, FL <: HList](
-      implicit
-      gen: Generic.Aux[CC, L],
-      flat: Aux[L, FL]
+  implicit def cc[
+    CC <: Product,
+     L <: HList,
+    FL <: HList
+  ](
+    implicit
+    gen: Generic.Aux[CC, L],
+    flat: Lazy[Aux[L, FL]]
   ): Aux[CC, FL] =
     make(
       cc ⇒
-        flat(
+        flat.value(
           gen.to(cc)
         )
     )

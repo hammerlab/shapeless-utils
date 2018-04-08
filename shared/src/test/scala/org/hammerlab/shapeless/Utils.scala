@@ -11,6 +11,7 @@ trait Utils {
   case class F(e: E)
 
   val aa = A(123)  // named with two a's to avoid collision with [[Matchers.a]]
+  val _a = aa
   val b = B("abc")
   val c = C(aa, b)
   val d = D(true)
