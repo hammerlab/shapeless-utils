@@ -1,9 +1,11 @@
-lazy val shapeless_utils = crossProject.in(file(".")).settings(
-  name := "shapeless-utils",
-  v"1.3.0",
-  dep(shapeless)
-)
-lazy val jvm = shapeless_utils.jvm
-lazy val js  = shapeless_utils.js
+lazy val `shapeless-utils` =
+  crossProject
+    .in(file("."))
+    .settings(
+      v"1.3.0",
+      dep(shapeless)
+    )
+lazy val jvm = `shapeless-utils`.jvm
+lazy val js  = `shapeless-utils`.js
 
 lazy val root = rootProject(js, jvm)
