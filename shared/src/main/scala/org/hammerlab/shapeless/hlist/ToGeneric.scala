@@ -23,12 +23,5 @@ object ToGeneric
       def apply(i: I): O = fn(i)
     }
 
-  type Id[T] = Aux[T, T]
-  def id[T](fn: T ⇒ T): Id[T] =
-    new ToGeneric[T] {
-      type Out = T
-      def apply(t: T): T = fn(t)
-    }
-
   implicit def generic[I, O](implicit g: Generic.Aux[I, O]): Aux[I, O] = aux(g.to)
 }

@@ -10,13 +10,12 @@ trait Utils {
   case class E(c: C, d: D, a: A, a2: A)
   case class F(e: E)
 
-  val aa = A(123)  // named with two a's to avoid collision with [[Matchers.a]]
-  val _a = aa
-  val b = B("abc")
-  val c = C(aa, b)
-  val d = D(true)
-  val e = E(c, d, A(456), A(789))
-  val f = F(e)
+  val _a = A(123)  // prefixed by "_" avoid collision with [[Matchers.a]]
+  val  b = B("abc")
+  val  c = C(_a, b)
+  val  d = D(true)
+  val  e = E(c, d, A(456), A(789))
+  val  f = F(e)
 
   val lga = LabelledGeneric[A]
   val lgb = LabelledGeneric[B]

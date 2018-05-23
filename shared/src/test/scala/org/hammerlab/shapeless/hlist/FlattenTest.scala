@@ -50,7 +50,7 @@ class FlattenTest
       (true :: ⊥) ::
       ⊥
     ) ::
-    (aa :: (b :: ⊥) :: ⊥) ::
+    (_a :: (b :: ⊥) :: ⊥) ::
     ⊥
 
   val flattenedCompound =

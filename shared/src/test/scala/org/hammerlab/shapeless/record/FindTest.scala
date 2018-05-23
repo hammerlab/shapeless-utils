@@ -7,9 +7,9 @@ class FindTest
   extends Suite {
 
   test("summon") {
-    Find[lga.Repr, W.`'n`.T, Int].apply(lga.to(aa)) should be(aa.n)
+    Find[lga.Repr, W.`'n`.T, Int].apply(lga.to(_a)) should be(_a.n)
 
-    Find[A, W.`'n`.T, Int].apply(aa) should be(aa.n)
+    Find[A, W.`'n`.T, Int].apply(_a) should be(_a.n)
 
     Find[B, W.`'s`.T, String].apply(b) should be(b.s)
 
@@ -43,36 +43,36 @@ class FindTest
   }
 
   test("ops") {
-    aa.find[Int]('n) should be(aa.n)
+    _a.find[Int]('n) should be(_a.n)
 
-    b.find[String]('s) should be(b.s)
+     b.find[ String]('s ) should be( b.s)
 
-    c.find[A]('a) should be(aa)
-    c.find[B]('b) should be(b)
+     c.find[      A]('a ) should be(_a)
+     c.find[      B]('b ) should be( b)
 
-    c.find[Int]('n) should be(aa.n)
-    c.find[String]('s) should be(b.s)
+     c.find[    Int]('n ) should be(_a.n)
+     c.find[ String]('s ) should be( b.s)
 
-    d.find[Boolean]('b) should be(d.b)
+     d.find[Boolean]('b ) should be( d.b)
 
-    e.find[A]('a2) should be(e.a2)  // unique name, non-unique type
-    e.find[C]('c) should be(e.c)
-    e.find[D]('d) should be(e.d)
+     e.find[      A]('a2) should be( e.a2)  // unique name, non-unique type
+     e.find[      C]('c ) should be( e.c)
+     e.find[      D]('d ) should be( e.d)
 
-    e.find[B]('b) should be(e.c.b)        // unique type, non-unique name
-    e.find[Boolean]('b) should be(e.d.b)  // unique type, non-unique name
+     e.find[      B]('b ) should be( e.c.b)  // unique type, non-unique name
+     e.find[Boolean]('b ) should be( e.d.b)  // unique type, non-unique name
 
-    e.find[String]('s) should be(e.c.b.s)
+     e.find[ String]('s ) should be( e.c.b.s)
 
-    f.find[E]('e) should be(f.e)
+     f.find[      E]('e ) should be( f.e)
 
-    f.find[A]('a2) should be(f.e.a2)  // unique name, non-unique type
-    f.find[C]('c) should be(f.e.c)
-    f.find[D]('d) should be(f.e.d)
+     f.find[      A]('a2) should be( f.e.a2)  // unique name, non-unique type
+     f.find[      C]('c ) should be( f.e.c)
+     f.find[      D]('d ) should be( f.e.d)
 
-    f.find[B]('b) should be(f.e.c.b)        // unique type, non-unique name
-    f.find[Boolean]('b) should be(f.e.d.b)  // unique type, non-unique name
+     f.find[      B]('b ) should be( f.e.c.b)  // unique type, non-unique name
+     f.find[Boolean]('b ) should be( f.e.d.b)  // unique type, non-unique name
 
-    f.find[String]('s) should be(f.e.c.b.s)
+     f.find[ String]('s ) should be( f.e.c.b.s)
   }
 }

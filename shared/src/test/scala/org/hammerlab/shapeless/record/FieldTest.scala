@@ -7,37 +7,37 @@ class FieldTest
   extends Suite {
 
   test("summon") {
-    Field[lga.Repr, W.`'n`.T].apply(lga.to(aa)) should be(aa.n)
+    Field[lga.Repr, W.`'n`.T].apply(lga.to(_a)) should be(_a.n)
 
-    Field[A, W.`'n`.T].apply(aa) should be(aa.n)
+    Field[A, W.`'n`. T].apply(_a) should be(_a.n)
 
-    Field[B, W.`'s`.T].apply(b) should be(b.s)
+    Field[B, W.`'s`. T].apply( b) should be( b.s)
 
-    Field[C, W.`'a`.T].apply(c) should be(c.a)
-    Field[C, W.`'b`.T].apply(c) should be(c.b)
+    Field[C, W.`'a`. T].apply( c) should be( c.a)
+    Field[C, W.`'b`. T].apply( c) should be( c.b)
 
-    Field[C, W.`'n`.T].apply(c) should be(c.a.n)
-    Field[C, W.`'s`.T].apply(c) should be(c.b.s)
+    Field[C, W.`'n`. T].apply( c) should be( c.a.n)
+    Field[C, W.`'s`. T].apply( c) should be( c.b.s)
 
-    Field[D, W.`'b`.T].apply(d) should be(d.b)
+    Field[D, W.`'b`. T].apply( d) should be( d.b)
 
-    Field[E, W.`'a2`.T].apply(e) should be(e.a2)
-    Field[E, W.`'c`.T].apply(e) should be(e.c)
-    Field[E, W.`'d`.T].apply(e) should be(e.d)
+    Field[E, W.`'a2`.T].apply( e) should be( e.a2)
+    Field[E, W.`'c` .T].apply( e) should be( e.c)
+    Field[E, W.`'d` .T].apply( e) should be( e.d)
 
-    Field[E, W.`'b`.T].apply(e) should be(e.c.b)
+    Field[E, W.`'b` .T].apply( e) should be( e.c.b)
 
-    Field[E, W.`'s`.T].apply(e) should be(e.c.b.s)
+    Field[E, W.`'s` .T].apply( e) should be( e.c.b.s)
 
-    Field[F, W.`'e`.T].apply(f) should be(f.e)
+    Field[F, W.`'e` .T].apply( f) should be( f.e)
 
-    Field[F, W.`'a2`.T].apply(f) should be(f.e.a2)
-    Field[F, W.`'c`.T].apply(f) should be(f.e.c)
-    Field[F, W.`'d`.T].apply(f) should be(f.e.d)
+    Field[F, W.`'a2`.T].apply( f) should be( f.e.a2)
+    Field[F, W.`'c` .T].apply( f) should be( f.e.c)
+    Field[F, W.`'d` .T].apply( f) should be( f.e.d)
 
-    Field[F, W.`'b`.T].apply(f) should be(f.e.c.b)
+    Field[F, W.`'b` .T].apply( f) should be( f.e.c.b)
 
-    Field[F, W.`'s`.T].apply(f) should be(f.e.c.b.s)
+    Field[F, W.`'s` .T].apply( f) should be( f.e.c.b.s)
   }
 
   /**
@@ -70,32 +70,32 @@ class FieldTest
 */
 
   test("ops") {
-    aa.field('n) should be(aa.n)
+    _a.field('n ) should be(_a.n)
 
-    b.field('s) should be(b.s)
+     b.field('s ) should be( b.s)
 
-    c.field('a) should be(aa)
-    c.field('b) should be(b)
+     c.field('a ) should be(_a)
+     c.field('b ) should be( b)
 
-    c.field('n) should be(aa.n)
-    c.field('s) should be(b.s)
+     c.field('n ) should be(_a.n)
+     c.field('s ) should be( b.s)
 
-    d.field('b) should be(d.b)
+     d.field('b ) should be( d.b)
 
-    e.field('a2) should be(e.a2)  // unique name, non-unique type
-    e.field('c) should be(e.c)
-    e.field('d) should be(e.d)
+     e.field('a2) should be( e.a2)  // unique name, non-unique type
+     e.field('c ) should be( e.c)
+     e.field('d ) should be( e.d)
 
-    e.field('s) should be(e.c.b.s)
+     e.field('s ) should be( e.c.b.s)
 
-    f.field('e) should be(f.e)
+     f.field('e ) should be( f.e)
 
-    f.field('a2) should be(f.e.a2)  // unique name, non-unique type
-    f.field('c) should be(f.e.c)
-    f.field('d) should be(f.e.d)
+     f.field('a2) should be( f.e.a2)  // unique name, non-unique type
+     f.field('c ) should be( f.e.c)
+     f.field('d ) should be( f.e.d)
 
-    f.field('b) should be(f.e.c.b)
+     f.field('b ) should be( f.e.c.b)
 
-    f.field('s) should be(f.e.c.b.s)
+     f.field('s ) should be( f.e.c.b.s)
   }
 }
