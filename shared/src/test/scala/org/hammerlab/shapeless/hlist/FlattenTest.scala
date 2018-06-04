@@ -1,12 +1,13 @@
 package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.shapeless.{ Suite, ⊥ }
+import org.hammerlab.test.Cmp
 import shapeless._
 
 trait FlattenTestI
   extends Suite {
-  def check[T, L <: HList](t: T, l: L)(implicit f: Flatten.Aux[T, L]) =
-    f(t) should be(l)
+  def check[T, L <: HList, D](t: T, l: L)(implicit f: Flatten.Aux[T, L], cmp: Cmp.Aux[L, D]) =
+    ==(f(t), l)
 }
 
 class FlattenTest
@@ -14,8 +15,8 @@ class FlattenTest
 
   test("summons") {
 
-    def check[T, L <: HList](t: T, l: L)(implicit f: Flatten.Aux[T, L]) =
-      f(t) should be(l)
+    def check[T, L <: HList, D](t: T, l: L)(implicit f: Flatten.Aux[T, L], cmp: Cmp.Aux[L, D]) =
+      ==(f(t), l)
 
     check(_a,  123  ::   ⊥ )
     check( b, "abc" ::   ⊥ )
@@ -63,12 +64,12 @@ class FlattenTest
 
   test("ops") {
     import Flatten._
-    _a.flatten should be(123 :: ⊥)
-     b.flatten should be("abc" :: ⊥)
-     c.flatten should be(123 :: "abc" :: ⊥)
-     d.flatten should be(true :: ⊥)
-     e.flatten should be(123 :: "abc" :: true :: 456 :: 789 :: ⊥)
+    ===(_a.flatten, 123 :: ⊥)
+    ===( b.flatten, "abc" :: ⊥)
+    ===( c.flatten, 123 :: "abc" :: ⊥)
+    ===( d.flatten, true :: ⊥)
+    ===( e.flatten, 123 :: "abc" :: true :: 456 :: 789 :: ⊥)
 
-    compound.flatten should be(flattenedCompound)
+    ===(compound.flatten, flattenedCompound)
   }
 }

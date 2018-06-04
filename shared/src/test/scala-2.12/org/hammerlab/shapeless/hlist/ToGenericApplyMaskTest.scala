@@ -1,6 +1,7 @@
 package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.shapeless.⊥
+import org.hammerlab.cmp.CanEq.Cmp
 import shapeless._
 
 class ToGenericApplyMaskTest
@@ -21,6 +22,8 @@ class ToGenericApplyMaskTest
     val aa = new AA("abc")
     val bb = BB("def")
     val cc = CC(aa, bb)
+
+    implicit val cmpAA: Cmp[AA] = Cmp.by[String, AA](_.toString)
 
     check(aa, "abc" :: ⊥)
     check(bb, "def" :: ⊥)

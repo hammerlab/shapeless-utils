@@ -1,13 +1,13 @@
 package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.shapeless.{ Suite, ⊥ }
+import org.hammerlab.test.Cmp
 import shapeless._
 
 trait ToGenericTestI
   extends Suite {
-  def check[T, L <: HList](t: T, l: L)(implicit g: ToGeneric.Aux[T, L]) = {
-    g(t) should be(l)
-  }
+  def check[T, L <: HList, D](t: T, l: L)(implicit g: ToGeneric.Aux[T, L], cmp: Cmp.Aux[L, D]) =
+    ==(g(t), l)
 }
 
 class ToGenericTest

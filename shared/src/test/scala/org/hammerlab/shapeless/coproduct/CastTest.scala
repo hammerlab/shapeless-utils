@@ -21,19 +21,21 @@ class CastTest
 
     val xs = Seq[X](y, z)
 
-    y map {
-      case n :: s :: ⊥ ⇒
-        2*n :: s.reverse :: ⊥
-    } should be(
+    ==(
+      y map {
+        case n :: s :: ⊥ ⇒
+          2*n :: s.reverse :: ⊥
+      },
       Y(222, "cba")
     )
 
-    xs map {
-      _ map {
-        case n :: s :: ⊥ ⇒
-          10*n :: s*2 :: ⊥
-      }
-    } should be(
+    ==(
+      xs map {
+        _ map {
+          case n :: s :: ⊥ ⇒
+            10*n :: s*2 :: ⊥
+        }
+      },
       Seq(
         Y(1110, "abcabc"),
         Z(2220, "defdef")
