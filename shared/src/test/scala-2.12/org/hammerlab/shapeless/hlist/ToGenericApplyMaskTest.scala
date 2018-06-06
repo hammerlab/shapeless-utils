@@ -1,7 +1,7 @@
 package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.shapeless.⊥
-import org.hammerlab.cmp.CanEq.Cmp
+import org.hammerlab.test.Cmp
 import shapeless._
 
 class ToGenericApplyMaskTest
