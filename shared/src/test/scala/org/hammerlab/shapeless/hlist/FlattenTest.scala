@@ -1,41 +1,47 @@
 package org.hammerlab.shapeless.hlist
 
 import org.hammerlab.shapeless.{ Suite, ⊥ }
+import org.hammerlab.test.Cmp
 import shapeless._
 
-class FlattenTest
+trait FlattenTestI
   extends Suite {
+  def check[T, L <: HList, D](t: T, l: L)(implicit f: Flatten.Aux[T, L], cmp: Cmp.Aux[L, D]) =
+    ==(f(t), l)
+}
+
+class FlattenTest
+  extends FlattenTestI {
 
   test("summons") {
-    implicitly[Flatten[A]].apply(aa) should be(123 :: ⊥)
-    implicitly[Flatten[B]].apply(b) should be("abc" :: ⊥)
-    implicitly[Flatten[C]].apply(c) should be(123 :: "abc" :: ⊥)
-    implicitly[Flatten[D]].apply(d) should be(true :: ⊥)
-    implicitly[Flatten[E]].apply(e) should be(123 :: "abc" :: true :: 456 :: 789 :: ⊥)
 
-    implicitly[Flatten[String]].apply("abc") should be("abc" :: ⊥)
+    def check[T, L <: HList, D](t: T, l: L)(implicit f: Flatten.Aux[T, L], cmp: Cmp.Aux[L, D]) =
+      ==(f(t), l)
 
-    implicitly[Flatten[(Int :: ⊥) :: ⊥]].apply((111 :: ⊥) :: ⊥) should be(111 :: ⊥)
+    check(_a,  123  ::   ⊥ )
+    check( b, "abc" ::   ⊥ )
+    check( c,  123  :: "abc" :: ⊥ )
+    check( d, true  ::   ⊥ )
+    check( e,  123  :: "abc" :: true :: 456 :: 789 :: ⊥ )
 
-    implicitly[Flatten[(Int :: (String :: ⊥) :: ⊥) :: ⊥]].apply((111 :: ("aaa" :: ⊥) :: ⊥) :: ⊥) should be(111 :: "aaa" :: ⊥)
+    check((111 :: ⊥) :: ⊥, 111 :: ⊥)
 
-    implicitly[Flatten[(A :: ⊥) :: ⊥]].apply((aa :: ⊥) :: ⊥) should be(123 :: ⊥)
+    check(
+      (111 :: ( "aaa" :: ⊥) :: ⊥) :: ⊥,
+       111 ::   "aaa" :: ⊥
+    )
 
-    implicitly[Flatten[(A :: (B :: ⊥) :: ⊥) :: ⊥]].apply((aa :: (b :: ⊥) :: ⊥) :: ⊥) should be(123 :: "abc" :: ⊥)
+    check(
+      (_a :: ⊥ ) :: ⊥,
+      123 :: ⊥
+    )
 
-    implicitly[
-      Flatten[
-        (Int :: ⊥) ::
-        (
-          String ::
-          (Boolean :: ⊥) ::
-          ⊥
-        ) ::
-        (A :: (B :: ⊥) :: ⊥) ::
-        ⊥
-      ]
-    ]
-    .apply(compound) should be(flattenedCompound)
+    check(
+      (_a :: (b :: ⊥) :: ⊥) :: ⊥,
+      123 :: "abc" :: ⊥
+    )
+
+    check(compound, flattenedCompound)
   }
 
   val compound =
@@ -43,10 +49,10 @@ class FlattenTest
     (
       "aaa" ::
       (true :: ⊥) ::
-        ⊥
-    ) ::
-    (aa :: (b :: ⊥) :: ⊥) ::
       ⊥
+    ) ::
+    (_a :: (b :: ⊥) :: ⊥) ::
+    ⊥
 
   val flattenedCompound =
     111 ::
@@ -54,16 +60,16 @@ class FlattenTest
     true ::
     123 ::
     "abc" ::
-      ⊥
+    ⊥
 
   test("ops") {
     import Flatten._
-    aa.flatten should be(123 :: ⊥)
-    b.flatten should be("abc" :: ⊥)
-    c.flatten should be(123 :: "abc" :: ⊥)
-    d.flatten should be(true :: ⊥)
-    e.flatten should be(123 :: "abc" :: true :: 456 :: 789 :: ⊥)
+    ===(_a.flatten, 123 :: ⊥)
+    ===( b.flatten, "abc" :: ⊥)
+    ===( c.flatten, 123 :: "abc" :: ⊥)
+    ===( d.flatten, true :: ⊥)
+    ===( e.flatten, 123 :: "abc" :: true :: 456 :: 789 :: ⊥)
 
-    compound.flatten should be(flattenedCompound)
+    ===(compound.flatten, flattenedCompound)
   }
 }

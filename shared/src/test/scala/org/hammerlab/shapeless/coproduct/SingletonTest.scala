@@ -10,12 +10,12 @@ object SingletonTest {
    */
   sealed trait Foo
 
-  case class A(n: Int) extends Foo
+    case class   A(n: Int) extends Foo
 
-  sealed trait Bar extends Foo
-  case class B(n: Int) extends Bar
-  case class C(n: Int) extends Bar
-  case class D(n: Int) extends Bar
+  sealed trait Bar         extends Foo
+    case class   B(n: Int) extends Bar
+    case class   C(n: Int) extends Bar
+    case class   D(n: Int) extends Bar
 
   /**
    * Hang a multiplication ([[*]]) operator off any [[Int]]-[[Singleton]], in this case [[Bar]] and its subclasses.
@@ -34,16 +34,16 @@ class SingletonTest
     // mapping preserves type
     val a: A = A(2) * 10
 
-    A(2) * 10 should be(A(20))
-    B(2) * 10 should be(B(20))
-    C(2) * 10 should be(C(20))
-    D(2) * 10 should be(D(20))
+    ==(A(2) * 10, A(20))
+    ==(B(2) * 10, B(20))
+    ==(C(2) * 10, C(20))
+    ==(D(2) * 10, D(20))
 
     val foo: Foo = A(2)
-    foo * (10) should be(A(20))
+    ==(foo * 10, A(20))
 
     val bar: Bar = B(2)
-    bar * (10) should be(B(20))
+    ==(bar * 10, B(20))
 
     // test summoning
     val _: Singleton[Foo, Int] = Singleton[Foo, Int]
