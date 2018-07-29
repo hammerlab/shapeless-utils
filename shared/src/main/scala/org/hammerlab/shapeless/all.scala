@@ -12,6 +12,7 @@ trait all
     with HasFlattenedOps
     with HasSelectOps
     with cast
+    with nats
     with singleton {
   val ⊥ = HNil
   type ⊥ = HNil
