@@ -6,17 +6,17 @@ shapeless-style type-classes for structural manipulation of algebraic data types
 [![org.hammerlab:shapeless-utils_2.1[12] on Maven Central](https://img.shields.io/maven-central/v/org.hammerlab/shapeless-utils_2.11.svg?maxAge=600&label=org.hammerlab:shapeless-utils_2[12])](http://search.maven.org/#search%7Cga%7C1%7Corg.hammerlab%20shapeless-utils)
 
 - `Find`: recursively find fields by type and/or name
-  - [`hlist.Find`](src/main/scala/org/hammerlab/shapeless/hlist/Find.scala): recursively find field by type
-  - [`record.Find`](src/main/scala/org/hammerlab/shapeless/record/Find.scala): recursively find field by name
-  - [`record.Field`](src/main/scala/org/hammerlab/shapeless/record/Field.scala): recursively find field by name and type
-- [`Flatten`](src/main/scala/org/hammerlab/shapeless/hlist/Flatten.scala): recursively flatten an `HList` or `case class` into an `HList`
-- [`Select`](src/main/scala/org/hammerlab/shapeless/hlist/Select.scala): covariant version of [`shapeless.ops.hlists.Selector`](https://github.com/milessabin/shapeless/blob/shapeless-2.3.2/core/src/main/scala/shapeless/ops/hlists.scala#L842-L865)
-- [`Cast`](src/main/scala/org/hammerlab/shapeless/coproduct/Cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
-  - [`Singleton`](src/main/scala/org/hammerlab/shapeless/coproduct/Singleton.scala): above when the HList contains one element
+  - [`hlist.Find`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Find.scala): recursively find field by type
+  - [`record.Find`](shared/src/main/scala/org/hammerlab/shapeless/record/Find.scala): recursively find field by name
+  - [`record.Field`](shared/src/main/scala/org/hammerlab/shapeless/record/Field.scala): recursively find field by name and type
+- [`Flatten`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Flatten.scala): recursively flatten an `HList` or `case class` into an `HList`
+- [`Select`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Select.scala): covariant version of [`shapeless.ops.hlists.Selector`](https://github.com/milessabin/shapeless/blob/shapeless-2.3.2/core/src/main/scala/shapeless/ops/hlists.scala#L842-L865)
+- [`Cast`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
+  - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/singleton.scala): above when the HList contains one element
 
 ## Examples
 
-Setup, from [test//Utils.scala](src/test/scala/org/hammerlab/shapeless/Utils.scala):
+Setup, from [test//Utils.scala](shared/src/test/scala/org/hammerlab/shapeless/Utils.scala):
 
 ```scala
 case class A(n: Int)
@@ -63,7 +63,7 @@ e.findt[A]        // doesn't compile: E.a, E.a2, and E.c.a both match
 e.findt[Int]      // doesn't compile: E.a.n, E.a2.n, and E.c.a.n both match
 ```
 
-(adapted from [hlist.FindTest](src/test/scala/org/hammerlab/shapeless/hlist/FindTest.scala))
+(adapted from [hlist.FindTest](shared/src/test/scala/org/hammerlab/shapeless/hlist/FindTest.scala))
 
 ### `find`
 
@@ -89,7 +89,7 @@ e.find('a)   // doesn't compile: E.c.a and E.a both match
 e.find('n)   // doesn't compile: E.a.n, E.a2.n, and E.c.a.n both match
 ```
 
-(adapted from [record.FindTest](src/test/scala/org/hammerlab/shapeless/record/FindTest.scala))
+(adapted from [record.FindTest](shared/src/test/scala/org/hammerlab/shapeless/record/FindTest.scala))
 
 ### `field`
 
