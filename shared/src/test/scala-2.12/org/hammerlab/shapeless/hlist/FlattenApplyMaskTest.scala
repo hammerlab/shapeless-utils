@@ -1,6 +1,5 @@
 package org.hammerlab.shapeless.hlist
 
-import hammerlab.shapeless.⊥
 import shapeless._
 
 class FlattenApplyMaskTest
@@ -8,10 +7,10 @@ class FlattenApplyMaskTest
      with utils {
 
   // Test summons
-  implicitly[Flatten.Aux[AA, String :: ⊥]]
-  implicitly[Flatten.Aux[AA :: ⊥, String :: ⊥]]
-  implicitly[Flatten.Aux[AA :: BB :: ⊥, String :: String :: ⊥]]
-  implicitly[Flatten.Aux[CC, String :: String :: ⊥]]
+  !![Flatten.Aux[AA, String :: ⊥]]
+  !![Flatten.Aux[AA :: ⊥, String :: ⊥]]
+  !![Flatten.Aux[AA :: BB :: ⊥, String :: String :: ⊥]]
+  !![Flatten.Aux[CC, String :: String :: ⊥]]
 
   test("flatten") {
     val aa = new AA("11")

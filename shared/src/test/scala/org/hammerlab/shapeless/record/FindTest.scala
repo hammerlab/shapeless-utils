@@ -1,6 +1,5 @@
 package org.hammerlab.shapeless.record
 
-import hammerlab.shapeless._
 import org.hammerlab.shapeless.Suite
 import shapeless.{ Witness ⇒ W }
 

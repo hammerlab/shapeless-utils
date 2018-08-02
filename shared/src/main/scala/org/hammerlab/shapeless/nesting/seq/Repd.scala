@@ -1,4 +1,4 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.nesting.seq
 
 import shapeless._
 import shapeless.nat._

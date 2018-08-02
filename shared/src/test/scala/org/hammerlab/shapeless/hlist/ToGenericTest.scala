@@ -1,6 +1,5 @@
 package org.hammerlab.shapeless.hlist
 
-import hammerlab.shapeless.⊥
 import org.hammerlab.shapeless.Suite
 import org.hammerlab.test.Cmp
 import shapeless._
@@ -14,11 +13,11 @@ trait ToGenericTestI
 class ToGenericTest
   extends ToGenericTestI {
 
-  implicitly[ToGeneric[A]]
-  implicitly[ToGeneric.Aux[A, Int :: ⊥]]
+  !![ToGeneric[A]]
+  !![ToGeneric.Aux[A, Int :: ⊥]]
 
-  implicitly[ToGeneric[C]]
-  implicitly[ToGeneric.Aux[C, A :: B :: ⊥]]
+  !![ToGeneric[C]]
+  !![ToGeneric.Aux[C, A :: B :: ⊥]]
 
   test("summons") {
     check(_a, 123 :: ⊥)

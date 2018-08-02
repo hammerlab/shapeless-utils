@@ -1,6 +1,5 @@
 package org.hammerlab.shapeless.hlist
 
-import hammerlab.shapeless._
 import org.hammerlab.shapeless.Suite
 import org.hammerlab.test.Cmp
 
@@ -13,13 +12,13 @@ class SelectTest
   implicit val cmpB2: Cmp[B2] = Cmp.by(b ⇒ b: B)
 
   test("direct access") {
-    ==(implicitly[Select[Foo, A2]].apply(foo), new A2( 123 ))
-    ==(implicitly[Select[Foo, B2]].apply(foo), new B2("abc"))
+    ==(!![Select[Foo, A2]].apply(foo), new A2( 123 ))
+    ==(!![Select[Foo, B2]].apply(foo), new B2("abc"))
   }
 
   test("covariant access") {
-    ==(implicitly[Select[Foo, A]].apply(foo), A( 123 ))
-    ==(implicitly[Select[Foo, B]].apply(foo), B("abc"))
+    ==(!![Select[Foo, A]].apply(foo), A( 123 ))
+    ==(!![Select[Foo, B]].apply(foo), B("abc"))
   }
 
   test("direct syntax") {

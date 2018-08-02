@@ -1,6 +1,5 @@
 package org.hammerlab.shapeless.hlist
 
-import hammerlab.shapeless.⊥
 import org.hammerlab.test.Cmp
 import shapeless._
 
@@ -8,14 +7,14 @@ class ToGenericApplyMaskTest
   extends ToGenericTestI
      with utils {
 
-  implicitly[ToGeneric[AA]]
-  implicitly[ToGeneric.Aux[AA, String :: ⊥]]
+  !![ToGeneric[AA]]
+  !![ToGeneric.Aux[AA, String :: ⊥]]
 
-  implicitly[ToGeneric[BB]]
-  implicitly[ToGeneric.Aux[BB, String :: ⊥]]
+  !![ToGeneric[BB]]
+  !![ToGeneric.Aux[BB, String :: ⊥]]
 
-  implicitly[ToGeneric[CC]]
-  implicitly[ToGeneric.Aux[CC, AA :: BB :: ⊥]]
+  !![ToGeneric[CC]]
+  !![ToGeneric.Aux[CC, AA :: BB :: ⊥]]
 
   test("summons") {
 

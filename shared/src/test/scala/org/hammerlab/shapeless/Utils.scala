@@ -21,5 +21,3 @@ trait Utils {
   val lgb = LabelledGeneric[B]
   val lgc = LabelledGeneric[C]
 }
-
-object Utils extends Utils
