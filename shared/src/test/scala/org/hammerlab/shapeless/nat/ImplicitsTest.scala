@@ -1,9 +1,9 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.nat
 
 import hammerlab.shapeless._
 import shapeless.Nat._
 
-class NatsTest
+class ImplicitsTest
   extends hammerlab.Suite {
   test("implicits") {
     implicitly[_0 ]

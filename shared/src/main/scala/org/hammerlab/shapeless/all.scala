@@ -1,19 +1,16 @@
 package org.hammerlab.shapeless
 
-import org.hammerlab.shapeless.coproduct.{ cast, singleton }
-import org.hammerlab.shapeless.hlist.{ HasFlattenedOps, HasSelectOps }
-import org.hammerlab.shapeless.record.HasFieldOps
 import shapeless.HNil
 
 trait all
   extends record.HasFindOps
-    with HasFieldOps
-    with hlist.HasFindOps
-    with HasFlattenedOps
-    with HasSelectOps
-    with cast
-    with nats
-    with singleton {
-  val ⊥ = HNil
+     with coproduct.cast
+     with coproduct.singleton
+     with hlist.HasFindOps
+     with hlist.HasFlattenedOps
+     with hlist.HasSelectOps
+     with nat.implicits
+     with record.HasFieldOps {
+   val ⊥ = HNil
   type ⊥ = HNil
 }
