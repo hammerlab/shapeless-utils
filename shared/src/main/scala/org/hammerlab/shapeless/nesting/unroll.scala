@@ -3,7 +3,7 @@ package org.hammerlab.shapeless.nesting
 import shapeless._
 import shapeless.nat._
 
-trait HasUnroll {
+trait unroll {
   /**
    * Type-class that reduces an [[In input]] type to a series of nested applications of a type-constructur [[T]]
    *

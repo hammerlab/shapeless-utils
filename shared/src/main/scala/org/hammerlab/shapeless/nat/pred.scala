@@ -2,7 +2,7 @@ package org.hammerlab.shapeless.nat
 
 import shapeless._
 
-trait HasPred {
+trait pred {
 
   /**
    * Inverse of [[Succ]]; type-level predecessor for each type-level integer

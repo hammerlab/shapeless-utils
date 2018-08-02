@@ -3,7 +3,7 @@ package org.hammerlab.shapeless.nesting.seq
 import shapeless._
 import shapeless.nat._
 
-trait HasNested {
+trait nested {
   sealed trait Nested[In] {
     type N <: Nat
     type Out

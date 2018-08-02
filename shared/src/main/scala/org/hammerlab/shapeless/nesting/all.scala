@@ -4,7 +4,7 @@ import org.hammerlab.shapeless.nesting
 
 trait all
   extends seq.all
-     with HasUnroll {
+     with unroll {
 
   object seq extends nesting.seq.all
 }

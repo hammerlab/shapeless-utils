@@ -2,4 +2,4 @@ package org.hammerlab.shapeless.nat
 
 trait all
   extends implicits
-     with HasPred
+     with pred
