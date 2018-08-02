@@ -1,7 +1,10 @@
 package org.hammerlab.shapeless.nesting
 
 import org.hammerlab.shapeless.nesting
-trait all {
-  type Unroll[In, T[_]] = nesting.Unroll[In, T]
-   val Unroll = nesting.Unroll
+
+trait all
+  extends seq.all
+     with HasUnroll {
+
+  object seq extends nesting.seq.all
 }

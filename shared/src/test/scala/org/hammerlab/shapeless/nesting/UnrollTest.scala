@@ -1,7 +1,6 @@
 package org.hammerlab.shapeless.nesting
 
 import org.hammerlab.shapeless.Suite
-import org.hammerlab.shapeless.nesting.Unroll.Aux
 import shapeless.Nat
 import shapeless.nat._
 
@@ -12,6 +11,8 @@ class UnrollTest
     !![Unroll[Seq[Seq[Int]], Seq]]
     !![Unroll[Seq[Seq[Seq[Int]]], Seq]]
   }
+
+  import Unroll.Aux
 
   test("count levels") {
     !![Aux[Int, Seq, _0, Int]]
