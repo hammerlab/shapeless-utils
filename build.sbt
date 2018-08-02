@@ -2,7 +2,7 @@ lazy val `shapeless-utils` =
   crossProject
     .in(file("."))
     .settings(
-      v"1.4.0",
+      v"1.4.1",
       dep(shapeless)
     )
 lazy val jvm = `shapeless-utils`.jvm
