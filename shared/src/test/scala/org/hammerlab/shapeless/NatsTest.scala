@@ -6,6 +6,7 @@ import shapeless.Nat._
 class NatsTest
   extends hammerlab.Suite {
   test("implicits") {
+    implicitly[_0 ]
     implicitly[_1 ]
     implicitly[_2 ]
     implicitly[_3 ]
