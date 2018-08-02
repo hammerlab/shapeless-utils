@@ -1,6 +1,7 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless._
+import hammerlab.shapeless._
+import org.hammerlab.shapeless.Suite
 
 class FindTest
   extends Suite {

@@ -1,6 +1,7 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless.{ Suite, ⊥ }
+import hammerlab.shapeless.⊥
+import org.hammerlab.shapeless.Suite
 import org.hammerlab.test.Cmp
 import shapeless._
 

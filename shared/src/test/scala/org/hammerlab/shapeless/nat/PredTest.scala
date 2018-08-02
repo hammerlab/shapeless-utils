@@ -6,7 +6,6 @@ import shapeless._
 
 class PredTest
   extends hammerlab.Suite {
-  implicit val __0 = _0
   test("summons") {
     Pred.fromSucc[_1]
     implicitly[Pred[_1]]

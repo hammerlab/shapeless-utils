@@ -20,9 +20,6 @@ object TList {
    * Any object can be a [[_1 1]]-element [[TList]] of its own type
    */
   case class Base[T](head: T) extends TList[T, _1]
-  object Base {
-    implicit def wrap[T](t: T): Base[T] = Base(t)
-  }
 
   /**
    * Prepending a [[T same-typed element]] to an existing [[TList]] yields a new [[TList]] whose length is one larger

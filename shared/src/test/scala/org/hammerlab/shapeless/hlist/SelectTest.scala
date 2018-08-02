@@ -1,5 +1,6 @@
 package org.hammerlab.shapeless.hlist
 
+import hammerlab.shapeless._
 import org.hammerlab.shapeless.Suite
 import org.hammerlab.test.Cmp
 

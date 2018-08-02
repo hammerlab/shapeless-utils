@@ -1,6 +1,6 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless.⊥
+import hammerlab.shapeless.⊥
 import shapeless._
 
 class FlattenApplyMaskTest
