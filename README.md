@@ -13,6 +13,8 @@ shapeless-style type-classes for structural manipulation of algebraic data types
 - [`Select`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Select.scala): covariant version of [`shapeless.ops.hlists.Selector`](https://github.com/milessabin/shapeless/blob/shapeless-2.3.2/core/src/main/scala/shapeless/ops/hlists.scala#L842-L865)
 - [`Cast`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
   - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/singleton.scala): above when the HList contains one element
+- [`TList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/TList.scala): list whose elements are the same type, and whose length is a type-level integer
+- [implicit instances of `shapeless.Nat` integer-types](shared/src/main/scala/org/hammerlab/shapeless/nat/implicits.scala)
 
 ## Examples
 
@@ -34,10 +36,11 @@ val e = E(c, d, A(456), A(789))
 val f = F(e)
 ```
 
-Import syntax:
+Default for importing everything from this library, as well as upstream shapeless:
 
 ```scala
 import hammerlab.shapeless._
+import shapeless._
 ```
 
 ### `findt`
@@ -147,7 +150,6 @@ val xs = Seq[X](y, z)
 Expose a `map` operation that transforms the HList representation, preserving the container type:
 
 ```scala
-import shapeless._
 xs map {
   _ map {
 	case n :: s :: ⊥ ⇒
@@ -155,4 +157,23 @@ xs map {
   }
 }
 // Seq(Y(222, cba), Z(444, fed))
+```
+
+#### `TList`
+
+Lists whose elements are the same type, and whose length is a type-level integer.
+
+Constructible most readily from tuples:
+
+```scala
+import shapeless.nat._
+(1, 2, 3): TList[Int, _3]
+```
+
+#### Implicit instances of type-level integers
+
+```scala
+the[_1]
+the[_2]
+// etc.
 ```
