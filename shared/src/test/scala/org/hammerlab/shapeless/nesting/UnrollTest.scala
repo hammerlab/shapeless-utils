@@ -1,12 +1,11 @@
 package org.hammerlab.shapeless.nesting
 
 import org.hammerlab.shapeless.Suite
-import shapeless.Nat
-import shapeless.nat._
 
 class UnrollTest
   extends Suite {
   test("basic summons") {
+    !![Unroll[Int, Seq]]
     !![Unroll[Seq[Int], Seq]]
     !![Unroll[Seq[Seq[Int]], Seq]]
     !![Unroll[Seq[Seq[Seq[Int]]], Seq]]

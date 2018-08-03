@@ -28,20 +28,19 @@ class NestedTest
     !![Nested[Seq[Seq[Seq[Int]]]]]
     !![Aux[Seq[Seq[Seq[Int]]], _3, Seq[Seq[Seq[Int]]]]]
 
-    val ev = !![Aux[Seq[Vector[Seq[Int]]], _3, Seq[Seq[Seq[Int]]]]]
-    ==(
-      ev(
-        Seq(
-          Vector(
-            Seq( 1,  2,  3),
-            Seq( 4,  5,  6)
-          ),
-          Vector(
-            Seq( 7,  8,  9),
-            Seq(10, 11, 12)
-          )
+    val input =
+      List(
+        Vector(
+          IndexedSeq( 1,  2,  3),
+          IndexedSeq( 4,  5,  6)
+        ),
+        Vector(
+          IndexedSeq( 7,  8,  9),
+          IndexedSeq(10, 11, 12)
         )
-      ),
+      )
+
+    val output =
       Seq(
         Seq(
           Seq( 1,  2,  3),
@@ -52,6 +51,11 @@ class NestedTest
           Seq(10, 11, 12)
         )
       )
-    )
+
+    val ev = !![Nested[List[Vector[IndexedSeq[Int]]]]]
+    ==(ev(input), output)
+
+    val aux = !![Aux[List[Vector[IndexedSeq[Int]]], _3, Seq[Seq[Seq[Int]]]]]
+    ==(aux(input), output)
   }
 }

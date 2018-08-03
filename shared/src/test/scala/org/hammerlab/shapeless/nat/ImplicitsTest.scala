@@ -1,7 +1,6 @@
 package org.hammerlab.shapeless.nat
 
 import org.hammerlab.shapeless.Suite
-import shapeless.Nat._
 
 class ImplicitsTest
   extends Suite {

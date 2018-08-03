@@ -5,6 +5,8 @@ shapeless-style type-classes for structural manipulation of algebraic data types
 [![codecov](https://codecov.io/gh/hammerlab/shapeless-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/hammerlab/shapeless-utils)
 [![org.hammerlab:shapeless-utils_2.1[12] on Maven Central](https://img.shields.io/maven-central/v/org.hammerlab/shapeless-utils_2.11.svg?maxAge=600&label=org.hammerlab:shapeless-utils_2[12])](http://search.maven.org/#search%7Cga%7C1%7Corg.hammerlab%20shapeless-utils)
 
+Feature overview:
+
 - `Find`: recursively find fields by type and/or name
   - [`hlist.Find`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Find.scala): recursively find field by type
   - [`record.Find`](shared/src/main/scala/org/hammerlab/shapeless/record/Find.scala): recursively find field by name
@@ -15,6 +17,8 @@ shapeless-style type-classes for structural manipulation of algebraic data types
   - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/singleton.scala): above when the HList contains one element
 - [`TList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/TList.scala): list whose elements are the same type, and whose length is a type-level integer
 - [implicit instances of `shapeless.Nat` integer-types](shared/src/main/scala/org/hammerlab/shapeless/nat/implicits.scala)
+- [`Unroll`](shared/src/main/scala/org/hammerlab/shapeless/nesting/unroll.scala): count and unroll repeated applications of a type-constructor
+- [`seq.Nested`](shared/src/main/scala/org/hammerlab/shapeless/nesting/seq/nested.scala): count and convert layers of nested `Seq`s (or its subtypes) to (the same number of layers of) vanilla `Seq`s 
 
 ## Examples
 
@@ -176,4 +180,47 @@ import shapeless.nat._
 the[_1]
 the[_2]
 // etc.
+```
+
+#### `Unroll`
+
+```scala
+the[Unroll[Int, Seq]]                // output types: _0, Int
+the[Unroll[Seq[Int], Seq]]           // output types: _1, Int
+the[Unroll[Seq[Seq[Int]], Seq]]      // output types: _2, Int
+the[Unroll[Seq[Seq[Seq[Int]]], Seq]] // output types: _3, Int
+
+// Proof:
+the[Aux[Int, Seq, _0, Int]]
+the[Aux[Seq[Int], Seq, _1, Int]]
+the[Aux[Seq[Seq[Int]], Seq, _2, Int]]
+the[Aux[Seq[Seq[Seq[Int]]], Seq, _3, Int]]
+```
+
+#### `seq.Nested`
+
+```scala
+val converter = the[Nested[List[Vector[IndexedSeq[Int]]]]]
+converter(
+  List(
+    Vector(
+      IndexedSeq( 1,  2,  3),
+      IndexedSeq( 4,  5,  6)
+    ),
+    Vector(
+      IndexedSeq( 7,  8,  9),
+      IndexedSeq(10, 11, 12)
+    )
+  )
+)
+// Seq(
+//   Seq(
+//     Seq( 1,  2,  3),
+//     Seq( 4,  5,  6)
+//   ),
+//   Seq(
+//     Seq( 7,  8,  9),
+//     Seq(10, 11, 12)
+//   )
+// )
 ```
