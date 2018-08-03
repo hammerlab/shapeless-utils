@@ -1,6 +1,6 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless.{ Suite, ⊥ }
+import org.hammerlab.shapeless.Suite
 import org.hammerlab.test.Cmp
 import shapeless._
 
@@ -63,7 +63,6 @@ class FlattenTest
     ⊥
 
   test("ops") {
-    import Flatten._
     ===(_a.flatten, 123 :: ⊥)
     ===( b.flatten, "abc" :: ⊥)
     ===( c.flatten, 123 :: "abc" :: ⊥)

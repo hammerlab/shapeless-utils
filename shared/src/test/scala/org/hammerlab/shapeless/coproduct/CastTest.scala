@@ -1,7 +1,5 @@
 package org.hammerlab.shapeless.coproduct
 
-import org.hammerlab.Suite
-
 object CastTest {
   sealed trait X
   case class Y(n: Int, s: String) extends X
@@ -9,7 +7,7 @@ object CastTest {
 }
 
 class CastTest
-  extends Suite {
+  extends hammerlab.Suite {
 
   import CastTest._
   import hammerlab.shapeless._

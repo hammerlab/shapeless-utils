@@ -1,33 +1,33 @@
 package org.hammerlab.shapeless.hlist
 
-import org.hammerlab.shapeless._
+import org.hammerlab.shapeless.Suite
 
 class FindTest
   extends Suite {
 
   test("summons") {
-    ==(implicitly[Find[A,     Int]].apply(_a), _a.n)
-    ==(implicitly[Find[B,  String]].apply( b),  b.s)
+    ==(!![Find[A,     Int]].apply(_a), _a.n)
+    ==(!![Find[B,  String]].apply( b),  b.s)
 
-    ==(implicitly[Find[C,       A]].apply( c),  c.a)
-    ==(implicitly[Find[C,       B]].apply( c),  c.b)
-    ==(implicitly[Find[C,     Int]].apply( c),  c.a.n)
-    ==(implicitly[Find[C,  String]].apply( c),  c.b.s)
+    ==(!![Find[C,       A]].apply( c),  c.a)
+    ==(!![Find[C,       B]].apply( c),  c.b)
+    ==(!![Find[C,     Int]].apply( c),  c.a.n)
+    ==(!![Find[C,  String]].apply( c),  c.b.s)
 
-    ==(implicitly[Find[D, Boolean]].apply( d), d.b)
+    ==(!![Find[D, Boolean]].apply( d), d.b)
 
-    ==(implicitly[Find[E,       B]].apply( e),  e.c.b)
-    ==(implicitly[Find[E,       C]].apply( e),  e.c)
-    ==(implicitly[Find[E,       D]].apply( e),  e.d)
-    ==(implicitly[Find[E, Boolean]].apply( e),  e.d.b)
-    ==(implicitly[Find[E,  String]].apply( e),  e.c.b.s)
+    ==(!![Find[E,       B]].apply( e),  e.c.b)
+    ==(!![Find[E,       C]].apply( e),  e.c)
+    ==(!![Find[E,       D]].apply( e),  e.d)
+    ==(!![Find[E, Boolean]].apply( e),  e.d.b)
+    ==(!![Find[E,  String]].apply( e),  e.c.b.s)
 
-    ==(implicitly[Find[F,       E]].apply( f),  f.e)
-    ==(implicitly[Find[F,       B]].apply( f),  f.e.c.b)
-    ==(implicitly[Find[F,       C]].apply( f),  f.e.c)
-    ==(implicitly[Find[F,       D]].apply( f),  f.e.d)
-    ==(implicitly[Find[F, Boolean]].apply( f),  f.e.d.b)
-    ==(implicitly[Find[F,  String]].apply( f),  f.e.c.b.s)
+    ==(!![Find[F,       E]].apply( f),  f.e)
+    ==(!![Find[F,       B]].apply( f),  f.e.c.b)
+    ==(!![Find[F,       C]].apply( f),  f.e.c)
+    ==(!![Find[F,       D]].apply( f),  f.e.d)
+    ==(!![Find[F, Boolean]].apply( f),  f.e.d.b)
+    ==(!![Find[F,  String]].apply( f),  f.e.c.b.s)
   }
 
   test("ops") {

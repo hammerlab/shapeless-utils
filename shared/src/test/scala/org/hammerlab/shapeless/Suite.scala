@@ -2,4 +2,7 @@ package org.hammerlab.shapeless
 
 class Suite
   extends hammerlab.Suite
-     with Utils
+     with all
+     with Utils {
+  val !! = shapeless.the
+}

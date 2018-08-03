@@ -5,18 +5,24 @@ shapeless-style type-classes for structural manipulation of algebraic data types
 [![codecov](https://codecov.io/gh/hammerlab/shapeless-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/hammerlab/shapeless-utils)
 [![org.hammerlab:shapeless-utils_2.1[12] on Maven Central](https://img.shields.io/maven-central/v/org.hammerlab/shapeless-utils_2.11.svg?maxAge=600&label=org.hammerlab:shapeless-utils_2[12])](http://search.maven.org/#search%7Cga%7C1%7Corg.hammerlab%20shapeless-utils)
 
+Feature overview:
+
 - `Find`: recursively find fields by type and/or name
-  - [`hlist.Find`](src/main/scala/org/hammerlab/shapeless/hlist/Find.scala): recursively find field by type
-  - [`record.Find`](src/main/scala/org/hammerlab/shapeless/record/Find.scala): recursively find field by name
-  - [`record.Field`](src/main/scala/org/hammerlab/shapeless/record/Field.scala): recursively find field by name and type
-- [`Flatten`](src/main/scala/org/hammerlab/shapeless/hlist/Flatten.scala): recursively flatten an `HList` or `case class` into an `HList`
-- [`Select`](src/main/scala/org/hammerlab/shapeless/hlist/Select.scala): covariant version of [`shapeless.ops.hlists.Selector`](https://github.com/milessabin/shapeless/blob/shapeless-2.3.2/core/src/main/scala/shapeless/ops/hlists.scala#L842-L865)
-- [`Cast`](src/main/scala/org/hammerlab/shapeless/coproduct/Cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
-  - [`Singleton`](src/main/scala/org/hammerlab/shapeless/coproduct/Singleton.scala): above when the HList contains one element
+  - [`hlist.Find`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Find.scala): recursively find field by type
+  - [`record.Find`](shared/src/main/scala/org/hammerlab/shapeless/record/Find.scala): recursively find field by name
+  - [`record.Field`](shared/src/main/scala/org/hammerlab/shapeless/record/Field.scala): recursively find field by name and type
+- [`Flatten`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Flatten.scala): recursively flatten an `HList` or `case class` into an `HList`
+- [`Select`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Select.scala): covariant version of [`shapeless.ops.hlists.Selector`](https://github.com/milessabin/shapeless/blob/shapeless-2.3.2/core/src/main/scala/shapeless/ops/hlists.scala#L842-L865)
+- [`Cast`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
+  - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/singleton.scala): above when the HList contains one element
+- [`TList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/TList.scala): list whose elements are the same type, and whose length is a type-level integer
+- [implicit instances of `shapeless.Nat` integer-types](shared/src/main/scala/org/hammerlab/shapeless/nat/implicits.scala)
+- [`Unroll`](shared/src/main/scala/org/hammerlab/shapeless/nesting/unroll.scala): count and unroll repeated applications of a type-constructor
+- [`seq.Nested`](shared/src/main/scala/org/hammerlab/shapeless/nesting/seq/nested.scala): count and convert layers of nested `Seq`s (or its subtypes) to (the same number of layers of) vanilla `Seq`s 
 
 ## Examples
 
-Setup, from [test//Utils.scala](src/test/scala/org/hammerlab/shapeless/Utils.scala):
+Setup, from [test//Utils.scala](shared/src/test/scala/org/hammerlab/shapeless/Utils.scala):
 
 ```scala
 case class A(n: Int)
@@ -34,10 +40,11 @@ val e = E(c, d, A(456), A(789))
 val f = F(e)
 ```
 
-Import syntax:
+Default for importing everything from this library, as well as upstream shapeless:
 
 ```scala
 import hammerlab.shapeless._
+import shapeless._
 ```
 
 ### `findt`
@@ -63,7 +70,7 @@ e.findt[A]        // doesn't compile: E.a, E.a2, and E.c.a both match
 e.findt[Int]      // doesn't compile: E.a.n, E.a2.n, and E.c.a.n both match
 ```
 
-(adapted from [hlist.FindTest](src/test/scala/org/hammerlab/shapeless/hlist/FindTest.scala))
+(adapted from [hlist.FindTest](shared/src/test/scala/org/hammerlab/shapeless/hlist/FindTest.scala))
 
 ### `find`
 
@@ -89,7 +96,7 @@ e.find('a)   // doesn't compile: E.c.a and E.a both match
 e.find('n)   // doesn't compile: E.a.n, E.a2.n, and E.c.a.n both match
 ```
 
-(adapted from [record.FindTest](src/test/scala/org/hammerlab/shapeless/record/FindTest.scala))
+(adapted from [record.FindTest](shared/src/test/scala/org/hammerlab/shapeless/record/FindTest.scala))
 
 ### `field`
 
@@ -147,7 +154,6 @@ val xs = Seq[X](y, z)
 Expose a `map` operation that transforms the HList representation, preserving the container type:
 
 ```scala
-import shapeless._
 xs map {
   _ map {
 	case n :: s :: ⊥ ⇒
@@ -155,4 +161,66 @@ xs map {
   }
 }
 // Seq(Y(222, cba), Z(444, fed))
+```
+
+#### `TList`
+
+Lists whose elements are the same type, and whose length is a type-level integer.
+
+Constructible most readily from tuples:
+
+```scala
+import shapeless.nat._
+(1, 2, 3): TList[Int, _3]
+```
+
+#### Implicit instances of type-level integers
+
+```scala
+the[_1]
+the[_2]
+// etc.
+```
+
+#### `Unroll`
+
+```scala
+the[Unroll[Int, Seq]]                // output types: _0, Int
+the[Unroll[Seq[Int], Seq]]           // output types: _1, Int
+the[Unroll[Seq[Seq[Int]], Seq]]      // output types: _2, Int
+the[Unroll[Seq[Seq[Seq[Int]]], Seq]] // output types: _3, Int
+
+// Proof:
+the[Aux[Int, Seq, _0, Int]]
+the[Aux[Seq[Int], Seq, _1, Int]]
+the[Aux[Seq[Seq[Int]], Seq, _2, Int]]
+the[Aux[Seq[Seq[Seq[Int]]], Seq, _3, Int]]
+```
+
+#### `seq.Nested`
+
+```scala
+val converter = the[Nested[List[Vector[IndexedSeq[Int]]]]]
+converter(
+  List(
+    Vector(
+      IndexedSeq( 1,  2,  3),
+      IndexedSeq( 4,  5,  6)
+    ),
+    Vector(
+      IndexedSeq( 7,  8,  9),
+      IndexedSeq(10, 11, 12)
+    )
+  )
+)
+// Seq(
+//   Seq(
+//     Seq( 1,  2,  3),
+//     Seq( 4,  5,  6)
+//   ),
+//   Seq(
+//     Seq( 7,  8,  9),
+//     Seq(10, 11, 12)
+//   )
+// )
 ```

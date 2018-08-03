@@ -1,6 +1,6 @@
-package org.hammerlab.shapeless
+package org.hammerlab.shapeless.nat
 
-trait nats {
+trait implicits {
   import shapeless.{ Nat ⇒ N }
   implicit val __0  = N._0
   implicit val __1  = N._1
