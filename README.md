@@ -3,7 +3,7 @@ shapeless-style type-classes for structural manipulation of algebraic data types
 
 [![Build Status](https://travis-ci.org/hammerlab/shapeless-utils.svg?branch=master)](https://travis-ci.org/hammerlab/shapeless-utils)
 [![codecov](https://codecov.io/gh/hammerlab/shapeless-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/hammerlab/shapeless-utils)
-[![org.hammerlab:shapeless-utils_2.1[12] on Maven Central](https://img.shields.io/maven-central/v/org.hammerlab/shapeless-utils_2.11.svg?maxAge=600&label=org.hammerlab:shapeless-utils_2[12])](http://search.maven.org/#search%7Cga%7C1%7Corg.hammerlab%20shapeless-utils)
+[![org.hammerlab:::shapeless-utils on Maven Central](https://img.shields.io/maven-central/v/org.hammerlab/shapeless-utils_2.11.svg?maxAge=600&label=org.hammerlab:::shapeless-utils)](http://search.maven.org/#search%7Cga%7C1%7Corg.hammerlab%20shapeless-utils)
 
 Feature overview:
 
