@@ -1,7 +1,5 @@
 package org.hammerlab.shapeless.tlist
 
-import shapeless.HNil
-
 class TListTest
   extends hammerlab.Suite {
   test("one") {
@@ -146,7 +144,12 @@ class TListTest
     !![Prepend[Int, TNil.type]]
     !![Prepend[Int, Int :: TNil]]
 
-    def prepend[H, TL <: TList](h: H, tl: TL)(implicit pp: Prepend[H, TL]) = h :: tl
+    def prepend[H, TL <: TList](h: H, tl: TL)(implicit pp: Prepend[H, TL]) = {
+      // importing this here to not interfere with TList-terms that are already in scope in this package; in general use
+      // this could go at the top a file or be mixed-in to a package-object rather than inserted awkwardly at call-sites
+      import hammerlab.shapeless.tlist._
+      h :: tl
+    }
 
     prepend(4, TNil) should be(4 :: TNil)
     ==(prepend(2, 4 :: TNil), 2 :: 4 :: TNil)
