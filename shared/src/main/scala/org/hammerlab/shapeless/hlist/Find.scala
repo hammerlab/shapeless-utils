@@ -37,12 +37,15 @@ object Find extends LowPriFind {
   implicit def foundHeadCons[E, H, T <: HList](implicit prev: Find[E :: T, E]): Find[E :: H :: T, E] = make(_.head)
   implicit def foundHeadEnd[H]: Find[H :: HNil, H] = make(_.head)
 
-  class Ops[T](val t: T) extends AnyVal {
+  implicit class Ops[T](val t: T) extends AnyVal {
     def findt[K](implicit f: Find[T, K]): K = f(t)
   }
 }
 
-trait HasFindOps {
-  implicit def makeHListFindOps[T](t: T): Ops[T] = new Ops(t)
+trait HasFind {
+  import org.hammerlab.shapeless.hlist
+  type Find[C, F] = hlist.Find[C, F]
+   val Find       = hlist.Find
+  @inline implicit def makeHListFindOps[T](t: T): Ops[T] = new Ops(t)
   def findt[C, F](implicit find: Find[C, F], c: C): F = find(c)
 }

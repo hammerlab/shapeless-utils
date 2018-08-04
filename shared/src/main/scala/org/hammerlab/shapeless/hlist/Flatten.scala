@@ -46,8 +46,7 @@ trait LowPriFlattenedImplicits extends LowestPri {
 }
 
 object Flatten
-  extends LowPriFlattenedImplicits
-    with HasFlattenedOps {
+  extends LowPriFlattenedImplicits {
 
   def apply[In](implicit flat: Flatten[In]): Aux[In, flat.Out] = flat
 
@@ -91,11 +90,14 @@ object Flatten
         )
     )
 
-  class Ops[T](val t: T) extends AnyVal {
+  implicit class Ops[T](val t: T) extends AnyVal {
     def flatten(implicit f: Flatten[T]): f.Out = f(t)
   }
 }
 
-trait HasFlattenedOps {
+trait HasFlattened {
+  import org.hammerlab.shapeless.hlist
+  type Flatten[In] = hlist.Flatten[In]
+   val Flatten     = hlist.Flatten
   implicit def makeFlattenedOps[T](t: T): Ops[T] = new Ops(t)
 }

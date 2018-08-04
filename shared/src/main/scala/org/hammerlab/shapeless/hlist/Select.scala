@@ -11,8 +11,7 @@ trait Select[L, +U]
   def apply(l: L): U
 }
 
-object Select
-  extends HasSelectOps {
+object Select {
 
   def apply[L, U](fn: L ⇒ U) = new Select[L, U] { override def apply(l: L) = fn(l) }
 
@@ -27,11 +26,14 @@ object Select
   implicit def recurse[H, L <: HList, U](implicit st : Select[L, U]): Select[H :: L, U] =
     Select[H :: L, U](l ⇒ st(l.tail))
 
-  class Ops[T](val t: T) extends AnyVal {
+  implicit class Ops[T](val t: T) extends AnyVal {
     def iselect[U](implicit s: Select[T, U]): U = s(t)
   }
 }
 
-trait HasSelectOps {
-  implicit def makeSelectOps[T](t: T): Ops[T] = new Ops(t)
+trait HasSelect {
+  import org.hammerlab.shapeless.hlist
+  type Select[L, +U] = hlist.Select[L, U]
+   val Select        = hlist.Select
+  @inline implicit def makeSelectOps[T](t: T): Ops[T] = Ops(t)
 }

@@ -13,12 +13,16 @@ Feature overview:
   - [`record.Field`](shared/src/main/scala/org/hammerlab/shapeless/record/Field.scala): recursively find field by name and type
 - [`Flatten`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Flatten.scala): recursively flatten an `HList` or `case class` into an `HList`
 - [`Select`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Select.scala): covariant version of [`shapeless.ops.hlists.Selector`](https://github.com/milessabin/shapeless/blob/shapeless-2.3.2/core/src/main/scala/shapeless/ops/hlists.scala#L842-L865)
-- [`Cast`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
-  - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/singleton.scala): above when the HList contains one element
-- [`TList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/TList.scala): list whose elements are the same type, and whose length is a type-level integer
+- [`Cast`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/Cast.scala): evidence that a product – or all branches of a coproduct – matches a given HList structure
+  - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/Singleton.scala): above when the HList contains one element
+- [`TList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/TList.scala): type-level list whose elements are all the same type
 - [implicit instances of `shapeless.Nat` integer-types](shared/src/main/scala/org/hammerlab/shapeless/nat/implicits.scala)
-- [`Unroll`](shared/src/main/scala/org/hammerlab/shapeless/nesting/unroll.scala): count and unroll repeated applications of a type-constructor
-- [`seq.Nested`](shared/src/main/scala/org/hammerlab/shapeless/nesting/seq/nested.scala): count and convert layers of nested `Seq`s (or its subtypes) to (the same number of layers of) vanilla `Seq`s 
+- [`Unroll`](shared/src/main/scala/org/hammerlab/shapeless/nesting/Unroll.scala): count and unroll repeated applications of a type-constructor
+- [`seq.Nested`](shared/src/main/scala/org/hammerlab/shapeless/nesting/seq/Nested.scala): count and convert layers of nested `Seq`s (or its subtypes) to (the same number of layers of) vanilla `Seq`s 
+- [`Instances`](shared/src/main/scala/org/hammerlab/shapeless/instances/Instances.scala): summon all possible instances of an ADT type, if there are only finitely many
+  - [`Singleton`](shared/src/main/scala/org/hammerlab/shapeless/instances/Singleton.scala): summon the single instance of a `case object`, by its type
+- [`Options`](shared/src/main/scala/org/hammerlab/shapeless/coproduct/Options.scala): compute an `HList` comprised of all branches of a `Coproduct`
+- [`Cartesian`](shared/src/main/scala/org/hammerlab/shapeless/hlist/Cartesian.scala): compute the Cartesian product of two `HList`s 
 
 ## Examples
 
@@ -165,13 +169,71 @@ xs map {
 
 #### `TList`
 
-Lists whose elements are the same type, and whose length is a type-level integer.
-
-Constructible most readily from tuples:
+Lists whose elements are the same type, and whose length is a type-level integer:
 
 ```scala
-import shapeless.nat._
-(1, 2, 3): TList[Int, _3]
+// Left out of default wildcard-import to avoid conflicts between tlist.:: and shapeless.::
+import hammerlab.shapeless.tlist._
+
+1 :: 2 :: 3 :: TNil
+// Int :: Int :: Int :: org.hammerlab.shapeless.tlist.TNil = ::(1,::(2,::(3,TNil)))
+```
+
+You can't construct a mixed-type TList:
+
+```scala
+1 :: 2 :: 'a :: TNil
+// <console>:15: error: type mismatch;
+//  found   : Int
+//  required: Symbol
+//        1 :: 2 :: 'a :: TNil
+//               ^
+```
+
+Tuples can be automatically converted:
+
+```scala
+TList((1, 2, 3))
+```
+
+
+[`Zip`](shared/src/main/scala/org/hammerlab/shapeless/tlist/Zip.scala), [`Map`](shared/src/main/scala/org/hammerlab/shapeless/tlist/Map.scala), and [`ToList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/ToList.scala) helpers are also available:
+
+```scala
+// Zip two equal-length TLists of Ints, sum them element-wise, and convert to a vanilla List
+def elemSum[
+      L,
+      R,
+      TL <: TList.Aux[      Int ],
+  Zipped <: TList.Aux[(Int, Int)]
+](
+  l: L,
+  r: R
+)(
+  implicit
+  ltl: IsTList.Aux[L, TL],
+  rtl: IsTList.Aux[R, TL],
+  zip: Zip.Aux[TL, TL, Zipped],
+  map: Map.Aux[Zipped, (Int, Int), Int, TL],
+  toList: ToList[Int, TL]
+):
+  List[Int] =
+  ltl(l)
+    .zip(rtl(r))(zip)
+    .map { case (l, r) ⇒ l + r }
+    .toList
+
+elemSum(
+  ( 1,  2),
+  (10, 20)
+)
+// 11 :: 22 :: Nil
+
+elemSum(
+   1 ::  2 :: TNil,
+  10 :: 20 :: TNil
+)
+// 11 :: 22 :: Nil
 ```
 
 #### Implicit instances of type-level integers

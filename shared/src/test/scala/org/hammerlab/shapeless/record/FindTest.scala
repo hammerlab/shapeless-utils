@@ -1,45 +1,49 @@
 package org.hammerlab.shapeless.record
 
-import org.hammerlab.shapeless.Suite
+import org.hammerlab.shapeless.Utils
 import shapeless.{ Witness ⇒ W }
 
 class FindTest
-  extends Suite {
+  extends hammerlab.Suite
+     with Utils {
+
+  import hammerlab.shapeless.record.find._
 
   test("summon") {
+
     ==(Find[lga.Repr, W.`'n`.T, Int].apply(lga.to(_a)), _a.n)
 
-    ==(Find[A, W.`'n`.T, Int].apply(_a), _a.n)
+    ==(Find[A, W.`'n` .T,     Int].apply(_a), _a.n      )
 
-    ==(Find[B, W.`'s`.T, String].apply(b), b.s)
+    ==(Find[B, W.`'s` .T,  String].apply( b),  b.s      )
 
-    ==(Find[C, W.`'a`.T, A].apply(c), c.a)
-    ==(Find[C, W.`'b`.T, B].apply(c), c.b)
+    ==(Find[C, W.`'a` .T,       A].apply( c),  c.a      )
+    ==(Find[C, W.`'b` .T,       B].apply( c),  c.b      )
 
-    ==(Find[C, W.`'n`.T, Int].apply(c), c.a.n)
-    ==(Find[C, W.`'s`.T, String].apply(c), c.b.s)
+    ==(Find[C, W.`'n` .T,     Int].apply( c),  c.a.n    )
+    ==(Find[C, W.`'s` .T,  String].apply( c),  c.b.s    )
 
-    ==(Find[D, W.`'b`.T, Boolean].apply(d), d.b)
+    ==(Find[D, W.`'b` .T, Boolean].apply( d),  d.b      )
 
-    ==(Find[E, W.`'a2`.T, A].apply(e), e.a2)
-    ==(Find[E, W.`'c`.T, C].apply(e), e.c)
-    ==(Find[E, W.`'d`.T, D].apply(e), e.d)
+    ==(Find[E, W.`'a2`.T,       A].apply( e),  e.a2     )
+    ==(Find[E, W.`'c` .T,       C].apply( e),  e.c      )
+    ==(Find[E, W.`'d` .T,       D].apply( e),  e.d      )
 
-    ==(Find[E, W.`'b`.T, B].apply(e), e.c.b)
-    ==(Find[E, W.`'b`.T, Boolean].apply(e), e.d.b)
+    ==(Find[E, W.`'b` .T,       B].apply( e),  e.c.b    )
+    ==(Find[E, W.`'b` .T, Boolean].apply( e),  e.d.b    )
 
-    ==(Find[E, W.`'s`.T, String].apply(e), e.c.b.s)
+    ==(Find[E, W.`'s` .T,  String].apply( e),  e.c.b.s  )
 
-    ==(Find[F, W.`'e`.T, E].apply(f), f.e)
+    ==(Find[F, W.`'e` .T,       E].apply( f),  f.e      )
 
-    ==(Find[F, W.`'a2`.T, A].apply(f), f.e.a2)
-    ==(Find[F, W.`'c`.T, C].apply(f), f.e.c)
-    ==(Find[F, W.`'d`.T, D].apply(f), f.e.d)
+    ==(Find[F, W.`'a2`.T,       A].apply( f),  f.e.a2   )
+    ==(Find[F, W.`'c` .T,       C].apply( f),  f.e.c    )
+    ==(Find[F, W.`'d` .T,       D].apply( f),  f.e.d    )
 
-    ==(Find[F, W.`'b`.T, B].apply(f), f.e.c.b)
-    ==(Find[F, W.`'b`.T, Boolean].apply(f), f.e.d.b)
+    ==(Find[F, W.`'b` .T,       B].apply( f),  f.e.c.b  )
+    ==(Find[F, W.`'b` .T, Boolean].apply( f),  f.e.d.b  )
 
-    ==(Find[F, W.`'s`.T, String].apply(f), f.e.c.b.s)
+    ==(Find[F, W.`'s` .T,  String].apply( f),  f.e.c.b.s)
   }
 
   test("ops") {
