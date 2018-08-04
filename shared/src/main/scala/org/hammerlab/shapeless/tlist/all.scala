@@ -14,7 +14,7 @@ trait all
   type ::[_T, Tail <: TList] = tlist.::[_T, Tail]
    val :: = tlist.::
 
-  type IsTList[T, Elem] = tlist.IsTList[T, Elem]
+  type IsTList[T] = tlist.IsTList[T]
    val IsTList = tlist.IsTList
 
   type Map[InList <: TList, Out] = tlist.Map[InList, Out]

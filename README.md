@@ -193,32 +193,47 @@ You can't construct a mixed-type TList:
 Tuples can be automatically converted:
 
 ```scala
-(1, 2, 3): TList
+TList((1, 2, 3))
 ```
 
-though in this example we lose more specific type information.
 
-Here's a better illustration, involving associated [`Zip`](), [`Map`](), and [`ToList`]() evidences:
+[`Zip`](shared/src/main/scala/org/hammerlab/shapeless/tlist/Zip.scala), [`Map`](shared/src/main/scala/org/hammerlab/shapeless/tlist/Map.scala), and [`ToList`](shared/src/main/scala/org/hammerlab/shapeless/tlist/ToList.scala) helpers are also available:
 
 ```scala
-def zipSumList[
-  T, 
-  TL <: TList, 
-  Zipped <: TList
+// Zip two equal-length TLists of Ints, sum them element-wise, and convert to a vanilla List
+def elemSum[
+      L,
+      R,
+      TL <: TList.Aux[      Int ],
+  Zipped <: TList.Aux[(Int, Int)]
 ](
-  l: TL, 
-  r: TL
+  l: L,
+  r: R
 )(
-  implicit 
+  implicit
+  ltl: IsTList.Aux[L, TL],
+  rtl: IsTList.Aux[R, TL],
   zip: Zip.Aux[TL, TL, Zipped],
-  map: Map[Zipped, T],
-  toList: ToList[T, TL]
+  map: Map.Aux[Zipped, (Int, Int), Int, TL],
+  toList: ToList[Int, TL]
 ):
-  List[T] = 
-  l
-    .zip(r)
-    .map(_ + _)
+  List[Int] =
+  ltl(l)
+    .zip(rtl(r))(zip)
+    .map { case (l, r) ⇒ l + r }
     .toList
+
+elemSum(
+  ( 1,  2),
+  (10, 20)
+)
+// 11 :: 22 :: Nil
+
+elemSum(
+   1 ::  2 :: TNil,
+  10 :: 20 :: TNil
+)
+// 11 :: 22 :: Nil
 ```
 
 #### Implicit instances of type-level integers

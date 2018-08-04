@@ -23,7 +23,7 @@ object TList {
   implicit class Ops[L <: TList](val l: L) extends AnyVal {
     def ::[T](t: T)(implicit ev: Prepend[T, L]) = ev(t, l)
   }
-  implicit def makeWithEvidence[T, Elem](t: T)(implicit ev: IsTList[T, Elem]): ev.Out = ev(t)
+  implicit def apply[T, TL <: TList](t: T)(implicit ev: IsTList.Aux[T, TL]): TL = ev(t)
 }
 
 sealed trait TNil extends TList {
