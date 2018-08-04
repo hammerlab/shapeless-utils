@@ -1,5 +1,7 @@
 package org.hammerlab.shapeless.tlist
 
+import org.hammerlab.shapeless.tlist
+
 trait Zip[L <: TList, R <: TList] {
   type Out <: TList
   def apply(l: L, r: R): Out
@@ -42,5 +44,19 @@ object Zip {
 
   implicit class Ops[L <: TList](val l: L) extends AnyVal {
     def zip[R <: TList](r: R)(implicit z: Zip[L, R]): z.Out = z(l, r)
+  }
+}
+
+trait HasZipOps {
+  @inline implicit def ShapelessTListZipOps[L <: TList](l: L): Zip.Ops[L] = Zip.Ops(l)
+}
+
+trait HasZip
+  extends HasZipOps {
+  type Zip[L <: TList, R <: TList] = tlist.Zip[L, R]
+   val Zip                         = tlist.Zip
+
+  object zip extends HasZipOps {
+    object syntax extends HasZipOps
   }
 }

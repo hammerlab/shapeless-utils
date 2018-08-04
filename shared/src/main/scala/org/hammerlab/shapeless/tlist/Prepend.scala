@@ -1,7 +1,7 @@
 package org.hammerlab.shapeless.tlist
 
 trait Prepend[H, T <: TList] {
-  def apply(h: H, t: T): H :: T// = ndarray.::(h, t)
+  def apply(h: H, t: T): H :: T
 }
 object Prepend {
   implicit def tnil[H]: Prepend[H, TNil] =

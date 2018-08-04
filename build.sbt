@@ -15,3 +15,8 @@ lazy val `shapeless-utils-root` =
   .settings(
     github.repo("shapeless-utils")
   )
+
+default(
+  hammerlab.test.suite.version := "1.0.2".snapshot,
+  hammerlab.test. base.version := "1.0.2".snapshot
+)

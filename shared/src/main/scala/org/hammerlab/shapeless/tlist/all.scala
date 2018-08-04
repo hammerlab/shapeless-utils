@@ -2,7 +2,9 @@ package org.hammerlab.shapeless.tlist
 
 import org.hammerlab.shapeless.tlist
 
-trait all {
+trait all
+  extends HasToList
+     with HasZip {
   type TList = tlist.TList
    val TList = tlist.TList
 
@@ -21,7 +23,7 @@ trait all {
   type Prepend[H, T <: TList] = tlist.Prepend[H, T]
    val Prepend = tlist.Prepend
 
-  type Zip[L <: TList, R <: TList] = tlist.Zip[L, R]
-   val Zip = tlist.Zip
-  @inline implicit def ShapelessTListZipOps[L <: TList](l: L): Zip.Ops[L] = Zip.Ops(l)
+  object syntax
+    extends HasToListOps
+       with HasZipOps
 }

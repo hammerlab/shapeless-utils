@@ -1,40 +1,47 @@
 package org.hammerlab.shapeless.tlist
 
 import hammerlab.shapeless.{ tlist ⇒ tl }
-import shapeless._
+import shapeless.{ :: ⇒ _, _ }
 
 /**
  * Type-class converting a type [[T]] to a corresponding [[TList]] of [[Elem elements]]
  */
 trait IsTList[T, Elem] {
-  def apply(t: T): TList.Aux[Elem]
+  type Out <: TList
+  def apply(t: T): Out
 }
 
 trait LowPriIsTlist {
+  type Aux[T, Elem, _O <: TList] = IsTList[T, Elem] { type Out = _O }
+
   /**
    * Constructor short-hand
    */
-  def apply[T, Elem, N <: Nat](fn: T ⇒ TList.Aux[Elem]): IsTList[T, Elem] =
+  def apply[T, Elem, _O <: TList](fn: T ⇒ _O): Aux[T, Elem, _O] =
     new IsTList[T, Elem] {
-      def apply(t: T): TList.Aux[Elem] = fn(t)
+      type Out = _O
+      def apply(t: T): Out = fn(t)
     }
 
   /**
    * Fallback: every [[T]] can be a [[TList]] of one [[T]]
    */
-  implicit def singleton[T]: IsTList[T, T] = apply(t ⇒ tl.::(t, TNil))
+  implicit def singleton[T]: Aux[T, T, T :: TNil] = apply(t ⇒ tl.::(t, TNil))
 }
 
 object IsTList
   extends LowPriIsTlist {
 
+  implicit def hnil[T]: Aux[HNil, T, TNil] =
+    apply(_ ⇒ TNil)
+
   /**
    * A one-element [[HList]] is a [[TList]] of one [[T]]
    */
-  implicit def baseHList[T]: IsTList[shapeless.::[T, HNil], T] =
-    apply(
-      l ⇒ tl.::(l.head, TNil)
-    )
+//  implicit def baseHList[T]: Aux[shapeless.::[T, HNil], T, T :: TNil] =
+//    apply(
+//      l ⇒ tl.::(l.head, TNil)
+//    )
 
   /**
    * Prepend an element to a [[TList]]-able [[HList]]
@@ -46,14 +53,17 @@ object IsTList
    */
   implicit def consHList[
     T,
-    L <: HList
+    L <: HList,
+    TL <: TList
   ](
     implicit
-    tail: Lazy[IsTList[L, T]]
+    tail: Lazy[Aux[L, T, TL]],
+    pp: Prepend[T, TL]
   ):
-    IsTList[
+    Aux[
       shapeless.::[T, L],
-      T
+      T,
+      T :: TL
     ] =
     apply(
       l ⇒
@@ -64,7 +74,7 @@ object IsTList
     )
 
   /**
-   * If a [[Product]]'s [[Generic]] form is a [[TList]] (of [[N]] [[Elem elements]]), then so is that [[Product]]
+   * If a [[Product]]'s [[Generic]] form is a [[TList]] (of [[Elem elements]]), then so is that [[Product]]
    *
    * Importantly: derives instances for tuples
    *
@@ -72,25 +82,23 @@ object IsTList
    * whether that's a feature or a bug.
    *
    * @param g [[Generic]] evidence linking [[T]] to [[L]]
-   * @param ev evidence that the generic form of [[T]], [[L]], is a [[TList]] of [[N]] [[Elem]]s
+   * @param ev evidence that the generic form of [[T]], [[L]], is a [[TList]] of [[Elem]]s
    * @tparam T input / [[Product]] type
    * @tparam L corresponding generic / [[HList]] type
    * @tparam Elem underlying element-type comprising the [[TList]]
-   * @tparam N number of [[Elem]]s in the [[TList]] / [[T]] / [[L]]
    * @return [[IsTList]] instance for [[Product]]-type [[T]]
    */
   implicit def product[
     T <: Product,
     L <: HList,
-    Elem,
-    N <: Nat
+    Elem
   ](
     implicit
     g: Generic.Aux[T, L],
-    ev: IsTList[L, Elem]
+    ev: Lazy[IsTList[L, Elem]]
   ):
-    IsTList[T, Elem] =
+    Aux[T, Elem, ev.value.Out] =
     apply(
-      t ⇒ ev(g.to(t))
+      t ⇒ ev.value(g.to(t))
     )
 }
