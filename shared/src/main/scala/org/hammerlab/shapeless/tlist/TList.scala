@@ -1,45 +1,37 @@
 package org.hammerlab.shapeless.tlist
 
-import shapeless._
-import shapeless.nat._
+import hammerlab.shapeless.{ tlist ⇒ tl }
 
-/**
- * A [[TList]] ("typed list") is a list with elements of a given type [[T]], whose length is the type-level integer
- * [[N]].
- *
- * For example, a 3-tuple of [[Int]]s can be converted to a [[TList]] of length [[_3 3]], but a tuple with elements of
- * different types cannot.
- */
-sealed trait TList[T, N <: Nat] {
-  def head: T
+sealed trait TList {
+  type T
+
+  // putting this here instead of in an Ops wrapper allows not explicitly specifying the type of the parameter to `fn`
+  def map[
+    Out,
+    S >: this.type <: TList
+  ](
+    fn: T ⇒ Out
+  )(
+    implicit
+    map: Map.Ax[S, T, Out]
+  ) =
+    map(this, fn)
 }
 
 object TList {
+  type Aux[_T] = TList { type T = _T }
+  implicit class Ops[L <: TList](val l: L) extends AnyVal {
+    def ::[T](t: T)(implicit ev: Prepend[T, L]) = ev(t, l)
+  }
+}
 
-  /**
-   * Any object can be a [[_1 1]]-element [[TList]] of its own type
-   */
-  case class Base[T](head: T) extends TList[T, _1]
+sealed trait TNil extends TList {
+  type T = Nothing
+  def ::[T](t: T) = tl.::(t, this)
+}
+case object TNil extends TNil
 
-  /**
-   * Prepending a [[T same-typed element]] to an existing [[TList]] yields a new [[TList]] whose length is one larger
-   */
-  case class Cons[T, P <: Nat](head: T, tail: TList[T, P]) extends TList[T, Succ[P]]
-
-  /**
-   * Convert an instance of [[T]] to a [[TList]] of [[N]] [[Elem elements]], provided an implicit implementation in the
-   * form of a suitable [[IsTList]] instance.
-   */
-  implicit def wrap[
-    T,
-    Elem,
-    N <: Nat
-  ](
-    t: T
-  )(
-    implicit
-    ev: IsTList[T, Elem, N]
-  ):
-    TList[Elem, N] =
-    ev(t)
+case class ::[_T, Tail <: TList](head: _T, tail: Tail) extends TList {
+  type T = _T
+  def ::[U >: this.type <: TList.Aux[T]](t: T): ::[T, U] = tl.::(t, this: U)
 }

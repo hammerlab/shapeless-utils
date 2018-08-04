@@ -1,5 +1,6 @@
 package org.hammerlab.shapeless.record
 
 trait all
-  extends HasFieldOps
-     with HasFindOps
+  extends HasField {
+  object find extends HasFind
+}

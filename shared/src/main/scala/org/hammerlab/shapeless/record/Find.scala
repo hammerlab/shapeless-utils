@@ -75,6 +75,9 @@ object Find
   }
 }
 
-trait HasFindOps {
-  implicit def makeRecordFindOps[T](t: T): Ops[T] = new Ops(t)
+trait HasFind {
+  import org.hammerlab.shapeless.{ record ⇒ r }
+  type Find[C, K <: Symbol, V] = r.Find[C, K, V]
+   val Find                    = r.Find
+  @inline implicit def ShapelessRecordFindOps[T](t: T): Ops[T] = new Ops(t)
 }

@@ -55,30 +55,38 @@ object Field
   def Aux[C, K, V](implicit find: Field.Aux[C, K, V]): Aux[C, K, V] = find
 
   /** Bridge a case-class to its [[LabelledGeneric]] */
-  implicit def fromCC[CC, L <: HList, K](implicit
-                                         gen: LabelledGeneric.Aux[CC, L],
-                                         find: Lazy[Field[L, K]]): Aux[CC, K, find.value.V] =
+  implicit def fromCC[CC, L <: HList, K](
+    implicit
+    gen: LabelledGeneric.Aux[CC, L],
+    find: Lazy[Field[L, K]]
+  ):
+    Aux[CC, K, find.value.V] =
     make(cc ⇒ find.value(gen.to(cc)))
 
   /** Convert a [[Selector]] to a [[Field]] */
   implicit def fromSelector[C <: HList, K](implicit sl: Selector[C, K]): Aux[C, K, sl.Out] =
     make(sl(_))
 
-  implicit def fromCCRec[CC, L <: HList, K](implicit
-                                            gen: Generic.Aux[CC, L],
-                                            find: Lazy[Field[L, K]]
-                                           ): Aux[CC, K, find.value.V] =
+  implicit def fromCCRec[CC, L <: HList, K](
+    implicit
+    gen: Generic.Aux[CC, L],
+    find: Lazy[Field[L, K]]
+  ):
+    Aux[CC, K, find.value.V] =
     make(cc ⇒ find.value(gen.to(cc)))
 
   /** Construct a [[Field]] by prepending an existing [[Field]] onto any [[HList]] */
   implicit def directCons[H, K, L <: HList](implicit findHead: Lazy[Field[H, K]]): Aux[H :: L, K, findHead.value.V] =
     make(c ⇒ findHead.value(c.head))
 
-  class Ops[T](val t: T) extends AnyVal {
+  implicit class Ops[T](val t: T) extends AnyVal {
     def field(w: Witness)(implicit f: Field[T, w.T]): f.V = f(t)
   }
 }
 
-trait HasFieldOps {
+trait HasField {
+  import org.hammerlab.shapeless.{ record ⇒ r }
+  type Field[C, K] = r.Field[C, K]
+   val Field       = r.Field
   implicit def makeRecordFieldOps[T](t: T): Ops[T] = new Ops(t)
 }

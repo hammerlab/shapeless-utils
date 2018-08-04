@@ -19,6 +19,8 @@ class CastTest
 
     val xs = Seq[X](y, z)
 
+    import hammerlab.shapeless.ShapelessCoproductCastOps
+
     ==(
       y map {
         case n :: s :: ⊥ ⇒

@@ -1,29 +1,28 @@
 package org.hammerlab.shapeless.tlist
 
-import org.hammerlab.shapeless.tlist.TList.{ Base, Cons }
+import hammerlab.shapeless.{ tlist ⇒ tl }
 import shapeless._
-import shapeless.nat._
 
 /**
- * Type-class converting a type [[T]] to a corresponding [[TList]] of [[N]] [[Elem elements]]
+ * Type-class converting a type [[T]] to a corresponding [[TList]] of [[Elem elements]]
  */
-trait IsTList[T, Elem, N <: Nat] {
-  def apply(t: T): TList[Elem, N]
+trait IsTList[T, Elem] {
+  def apply(t: T): TList.Aux[Elem]
 }
 
 trait LowPriIsTlist {
   /**
    * Constructor short-hand
    */
-  def apply[T, Elem, N <: Nat](fn: T ⇒ TList[Elem, N]): IsTList[T, Elem, N] =
-    new IsTList[T, Elem, N] {
-      def apply(t: T): TList[Elem, N] = fn(t)
+  def apply[T, Elem, N <: Nat](fn: T ⇒ TList.Aux[Elem]): IsTList[T, Elem] =
+    new IsTList[T, Elem] {
+      def apply(t: T): TList.Aux[Elem] = fn(t)
     }
 
   /**
-   * Fallback: every [[T]] can be a [[TList]] of [[_1 one]] [[T]]
+   * Fallback: every [[T]] can be a [[TList]] of one [[T]]
    */
-  implicit def singleton[T]: IsTList[T, T, _1] = apply(Base(_))
+  implicit def singleton[T]: IsTList[T, T] = apply(t ⇒ tl.::(t, TNil))
 }
 
 object IsTList
@@ -32,37 +31,33 @@ object IsTList
   /**
    * A one-element [[HList]] is a [[TList]] of one [[T]]
    */
-  implicit def baseHList[T]: IsTList[T :: HNil, T, _1] =
+  implicit def baseHList[T]: IsTList[shapeless.::[T, HNil], T] =
     apply(
-      l ⇒ Base(l.head)
+      l ⇒ tl.::(l.head, TNil)
     )
 
   /**
    * Prepend an element to a [[TList]]-able [[HList]]
    *
-   * @param tail turn an [[L]] into a [[TList]] of [[N]] [[T]]s
+   * @param tail turn an [[L]] into a [[TList]] of [[T]]s
    * @tparam T element-type
-   * @tparam L [[HList]]-type made of [[N]] [[T]]s
-   * @tparam N length of [[L]]
-   * @return [[IsTList]] instance for creating a [[TList]] of [[T]]s one longer than [[N]] from [[HList]]s comprised of
-   *         a [[T]] prepended to an [[L]]
+   * @tparam L [[HList]]-type made of [[T]]s
+   * @return [[IsTList]] instance for prepending a [[T]] to a [[TList]]
    */
   implicit def consHList[
     T,
-    L <: HList,
-    N <: Nat
+    L <: HList
   ](
     implicit
-    tail: Lazy[IsTList[L, T, N]]
+    tail: Lazy[IsTList[L, T]]
   ):
     IsTList[
-      T :: L,
-      T,
-      Succ[N]
+      shapeless.::[T, L],
+      T
     ] =
     apply(
       l ⇒
-        Cons(
+        tl.::(
           l.head,
           tail.value(l.tail)
         )
@@ -92,9 +87,9 @@ object IsTList
   ](
     implicit
     g: Generic.Aux[T, L],
-    ev: IsTList[L, Elem, N]
+    ev: IsTList[L, Elem]
   ):
-    IsTList[T, Elem, N] =
+    IsTList[T, Elem] =
     apply(
       t ⇒ ev(g.to(t))
     )
