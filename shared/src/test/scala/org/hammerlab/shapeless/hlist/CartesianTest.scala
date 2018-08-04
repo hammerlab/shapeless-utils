@@ -6,7 +6,7 @@ import shapeless._
 class CartesianTest
   extends Suite {
   test("products") {
-    implicitly[
+    !![
       Cartesian[
         Int :: HNil,
         String :: HNil
@@ -20,7 +20,7 @@ class CartesianTest
       HNil
     )
 
-    implicitly[
+    !![
       Cartesian[
         Int :: Boolean :: HNil,
         String :: HNil
@@ -35,7 +35,7 @@ class CartesianTest
       HNil
     )
 
-    implicitly[
+    !![
       Cartesian[
         Int :: Boolean :: HNil,
         String :: Long ::  HNil
@@ -49,6 +49,32 @@ class CartesianTest
       (1 :: 3L :: HNil) ::
       (true :: "a" :: HNil) ::
       (true :: 3L :: HNil) ::
+      HNil
+    )
+
+    !![
+      Cartesian[
+        Int :: HNil,
+        HNil
+      ]
+    ]
+    .apply(
+      1 :: HNil,
+      HNil
+    ) should be(
+      HNil
+    )
+
+    !![
+      Cartesian[
+        HNil,
+        Int :: HNil
+      ]
+    ]
+    .apply(
+      HNil,
+      1 :: HNil
+    ) should be(
       HNil
     )
   }

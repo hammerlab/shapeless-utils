@@ -10,6 +10,9 @@ trait Singleton[T] {
   def apply(): T
 }
 object Singleton {
+
+  def apply[T]()(implicit s: Singleton[T]): T = s()
+
   implicit def singleton[T](implicit g: Generic.Aux[T, HNil]): Singleton[T] =
     new Singleton[T] {
       def apply(): T = g.from(HNil)

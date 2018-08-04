@@ -140,4 +140,16 @@ class TListTest
       11 :: 22 :: Nil
     )
   }
+
+  test("prepend ops") {
+    !![Prepend[Int, TNil]]
+    !![Prepend[Int, TNil.type]]
+    !![Prepend[Int, Int :: TNil]]
+
+    def prepend[H, TL <: TList](h: H, tl: TL)(implicit pp: Prepend[H, TL]) = h :: tl
+
+    prepend(4, TNil) should be(4 :: TNil)
+    ==(prepend(2, 4 :: TNil), 2 :: 4 :: TNil)
+    illTyped("prepend('a, 4 :: TNil)")
+  }
 }

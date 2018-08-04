@@ -3,17 +3,9 @@ package org.hammerlab.shapeless.tlist
 import org.hammerlab.shapeless.tlist
 
 trait all
-  extends HasToList
+  extends HasTList
+     with HasToList
      with HasZip {
-  type TList = tlist.TList
-   val TList = tlist.TList
-
-  type TNil = tlist.TNil
-   val TNil = tlist.TNil
-
-  type ::[_T, Tail <: TList] = tlist.::[_T, Tail]
-   val :: = tlist.::
-
   type IsTList[T] = tlist.IsTList[T]
    val IsTList = tlist.IsTList
 

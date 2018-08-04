@@ -10,7 +10,8 @@ trait Instances[In] {
 }
 trait LowPriInstances {
   type Aux[In, _O <: HList] = Instances[In] { type Out = _O }
-  def apply[In, _O <: HList](out: _O): Aux[In, _O] =
+
+  def make[In, _O <: HList](out: _O): Aux[In, _O] =
     new Instances[In] {
       type Out = _O
       def apply(): Out = out
@@ -27,7 +28,7 @@ trait LowPriInstances {
       T,
       i.value.Out
     ] =
-    apply(
+    make(
       i.value()
     )
 
@@ -43,7 +44,7 @@ trait LowPriInstances {
     c: Cartesian[HI, LI]
   ):
     Aux[H :: L, c.Out] =
-    apply(
+    make(
       c(
         hi(),
         li()
@@ -53,10 +54,12 @@ trait LowPriInstances {
 object Instances
   extends LowPriInstances {
 
-  implicit def singleton[T](implicit s: Singleton[T]): Aux[T, T :: HNil] = apply(s() :: HNil)
+  def apply[In]()(implicit i: Instances[In]): i.Out = i()
 
-  implicit val cnil: Aux[CNil, HNil] = apply(HNil)
-  implicit val hnil: Aux[HNil, HNil] = apply(HNil)
+  implicit def singleton[T](implicit s: Singleton[T]): Aux[T, T :: HNil] = make(s() :: HNil)
+
+  implicit val cnil: Aux[CNil, HNil] = make(HNil)
+  implicit val hnil: Aux[HNil, HNil] = make(HNil)
 
   implicit def one[T](
     implicit
@@ -66,7 +69,7 @@ object Instances
       T :: HNil,
       i.Out
     ] =
-    apply(
+    make(
       i()
     )
 
@@ -85,7 +88,7 @@ object Instances
       H :+: C,
       pp.Out
     ] =
-    apply(
+    make(
       pp(
         hi.value(),
         ci.value()
@@ -104,7 +107,7 @@ object Instances
       T,
       i.value.Out
     ] =
-    apply(
+    make(
       i.value()
     )
 }

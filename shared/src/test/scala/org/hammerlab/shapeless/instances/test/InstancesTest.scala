@@ -1,8 +1,9 @@
-package org.hammerlab.shapeless.instances
+package org.hammerlab.shapeless.instances.test
 
-import org.hammerlab.shapeless.Suite
-import org.hammerlab.shapeless.instances.InstancesTest.ByteOrder._
-import org.hammerlab.shapeless.instances.InstancesTest._
+import org.hammerlab.shapeless.instances.test.InstancesTest.ByteOrder._
+import org.hammerlab.shapeless.instances.test.InstancesTest._
+import hammerlab.shapeless.instances._
+import hammerlab.shapeless.instances.singleton._
 import shapeless.HNil
 
 object InstancesTest {
@@ -39,12 +40,31 @@ object InstancesTest {
 }
 
 class InstancesTest
-  extends Suite {
+  extends hammerlab.Suite {
+
+  import DType._
+
+  test("singletons") {
+    ==(Singleton[int.type](), int)
+    ==(Singleton[None.type](), None)
+  }
 
   test("instances") {
-    import DType._
-    implicitly[Instances[DType]].apply() should be(bool :: float :: int :: string :: unicode :: HNil)
-    implicitly[Instances[ByteOrder]].apply() should be(BigEndian :: LittleEndian :: None :: HNil)
+    Instances[DType]() should be(
+      bool ::
+      float ::
+      int ::
+      string ::
+      unicode ::
+      HNil
+    )
+
+    Instances[ByteOrder]() should be(
+      BigEndian ::
+      LittleEndian ::
+      None ::
+      HNil
+    )
 
     val > = BigEndian
     val < = LittleEndian
@@ -56,7 +76,7 @@ class InstancesTest
     val S = string
     val U = unicode
 
-    implicitly[Instances[Foo[_]]].apply() should be(
+    !![Instances[Foo[_]]].apply() should be(
       (> :: b :: HNil) ::
       (> :: f :: HNil) ::
       (> :: i :: HNil) ::

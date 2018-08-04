@@ -8,6 +8,6 @@ trait all {
 
   object singleton {
     type Singleton[T] = instances.Singleton[T]
-     val singleton    = instances.Singleton
+     val Singleton    = instances.Singleton
   }
 }

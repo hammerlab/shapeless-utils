@@ -18,36 +18,10 @@ trait LowPriCartesian {
       @inline def apply(l: L, r: R): Out = fn(l, r)
     }
 
-  implicit def rhnil[L <: HList]: Aux[L, HNil, HNil] = apply((_, _) ⇒ HNil)
-}
-trait LowPriCartesian2
-  extends LowPriCartesian {
-  implicit def lhnil[R <: HList]: Aux[HNil, R, HNil] = apply((_, _) ⇒ HNil)
-}
-trait LowPriCartesian3
-  extends LowPriCartesian2 {
-  implicit def lbase[
-    L,
-    R <: HList
-  ](
-    implicit
-    ep: ElemwisePrepend[L, R]
-  ):
-    Aux[
-      L :: HNil,
-      R,
-      ep.Out
-    ] =
-    apply {
-      case (
-        l :: HNil,
-        r
-      ) ⇒
-        ep(l, r)
-    }
+  implicit def lhnil[R <: HList]: Aux[HNil, R, HNil] = apply { (_, _) ⇒ HNil }
 }
 object Cartesian
-  extends LowPriCartesian3 {
+  extends LowPriCartesian {
   implicit def lcons[
        H,
        L <: HList,

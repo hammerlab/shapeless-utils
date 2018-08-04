@@ -36,3 +36,22 @@ case class ::[_T, Tail <: TList](head: _T, tail: Tail) extends TList {
   type T = _T
   def ::[U >: this.type <: TList.Aux[T]](t: T): ::[T, U] = tl.::(t, this: U)
 }
+
+trait HasTListOps {
+  @inline implicit def ShapelessTListOps[L <: TList](l: L): TList.Ops[L] = TList.Ops(l)
+}
+
+trait HasTList
+  extends HasTListOps {
+
+  import org.hammerlab.shapeless.tlist
+
+  type TList = tlist.TList
+   val TList = tlist.TList
+
+  type TNil = tlist.TNil
+   val TNil = tlist.TNil
+
+  type ::[_T, Tail <: TList] = tlist.::[_T, Tail]
+   val :: = tlist.::
+}

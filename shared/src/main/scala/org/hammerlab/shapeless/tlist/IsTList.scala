@@ -59,10 +59,8 @@ object IsTList
     ] =
     apply(
       l ⇒
-        tl.::(
-          l.head,
-          tail.value(l.tail)
-        )
+        l.head ::
+        tail.value(l.tail)
     )
 
   /**
