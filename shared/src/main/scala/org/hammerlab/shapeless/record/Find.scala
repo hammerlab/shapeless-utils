@@ -39,7 +39,7 @@ trait LowPriFind {
   /**
    * Extend a [[Find]] when an arbitrary element is prepended
    *
-   * This needs to be lower-priority than [[Find.fromSelector]], because we prefer to recurse
+   * This needs to be lower-priority than `fromSelector` below, because we prefer to recurse
    */
   implicit def continue[H, L <: HList, K <: Symbol, V](implicit findTail: Find[L, K, V]): Find[H :: L, K, V] =
     make(c ⇒ findTail(c.tail))
@@ -50,10 +50,18 @@ object Find
 
   def apply[C, K <: Symbol, V](implicit find: Find[C, K, V]): Find[C, K, V] = find
 
-  /** Recurse from a case-class to any of its fields, via its [[Generic]] */
-  implicit def fromCC[CC, L <: HList, K <: Symbol, V](implicit
-                                                      gen: LabelledGeneric.Aux[CC, L],
-                                                      find: Lazy[Find[L, K, V]]): Find[CC, K, V] =
+  /** Recurse from a case-class to any of its fields, via its [[LabelledGeneric]] */
+  implicit def fromCC[
+    CC,
+     L <: HList,
+     K <: Symbol,
+     V
+  ](
+    implicit
+    gen: LabelledGeneric.Aux[CC, L],
+    find: Lazy[Find[L, K, V]]
+  ):
+    Find[CC, K, V] =
     make(cc ⇒ find.value(gen.to(cc)))
 
   implicit def consElem[K <: Symbol, V, L <: HList]: Find[FieldType[K, V] :: L, K, V] =
