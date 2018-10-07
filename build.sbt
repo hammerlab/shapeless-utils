@@ -1,17 +1,16 @@
 lazy val `shapeless-utils` =
-  crossProject
+  cross
     .in(file("."))
     .settings(
-      v"1.5.0",
-      dep(shapeless)
+      v"1.5.1",
+      dep(
+        cats,
+        shapeless
+      )
     )
-lazy val jvm = `shapeless-utils`.jvm
-lazy val js  = `shapeless-utils`.js
 lazy val `shapeless-utils-root` =
-  root(
-    js,
-    jvm
-  )
-  .settings(
-    github.repo("shapeless-utils")
-  )
+  `shapeless-utils`
+    .x
+    .settings(
+      github.repo("shapeless-utils")
+    )

@@ -33,8 +33,8 @@ trait LowPriInstances {
     )
 
   implicit def cons[
-    H,
-    L <: HList,
+     H,
+     L <: HList,
     HI <: HList,
     LI <: HList
   ](
@@ -63,19 +63,19 @@ object Instances
 
   implicit def one[T](
     implicit
-    i: Instances[T]
+    i: Lazy[Instances[T]]
   ):
     Aux[
       T :: HNil,
-      i.Out
+      i.value.Out
     ] =
     make(
-      i()
+      i.value()
     )
 
   implicit def ccons[
-    H,
-    C <: Coproduct,
+     H,
+     C <: Coproduct,
     HI <: HList,
     CI <: HList
   ](
