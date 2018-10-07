@@ -1,5 +1,8 @@
 package org.hammerlab.shapeless.instances.test
 
+import java.nio
+
+import cats.Show
 import org.hammerlab.shapeless.instances.test.InstancesTest.ByteOrder._
 import org.hammerlab.shapeless.instances.test.InstancesTest._
 import hammerlab.shapeless.instances._
@@ -23,8 +26,8 @@ object InstancesTest {
     object Endianness {
       implicit def toByteOrder(endianness: Endianness): java.nio.ByteOrder =
         endianness match {
-          case LittleEndian ⇒ java.nio.ByteOrder.LITTLE_ENDIAN
-          case    BigEndian ⇒ java.nio.ByteOrder.BIG_ENDIAN
+          case LittleEndian ⇒ nio.ByteOrder.LITTLE_ENDIAN
+          case    BigEndian ⇒ nio.ByteOrder.   BIG_ENDIAN
         }
     }
   }
@@ -34,8 +37,8 @@ object InstancesTest {
     case object     int extends DType("i")
     case object    bool extends DType("b")
     case object   float extends DType("f")
-    case object  string extends DType("S")
-    case object unicode extends DType("U")
+    case object  string extends DType("s")
+    case object unicode extends DType("u")
   }
 }
 
@@ -49,51 +52,82 @@ class InstancesTest
     ==(Singleton[None.type](), None)
   }
 
+  val > = BigEndian
+  val < = LittleEndian
+  val | = None
+
+  val b = bool
+  val f = float
+  val i = int
+  val s = string
+  val u = unicode
+
   test("instances") {
     Instances[DType]() should be(
-      bool ::
-      float ::
-      int ::
-      string ::
+         bool ::
+        float ::
+          int ::
+       string ::
       unicode ::
-      HNil
+         HNil
     )
 
     Instances[ByteOrder]() should be(
-      BigEndian ::
+         BigEndian ::
       LittleEndian ::
-      None ::
-      HNil
+              None ::
+              HNil
     )
-
-    val > = BigEndian
-    val < = LittleEndian
-    val | = None
-
-    val b = bool
-    val f = float
-    val i = int
-    val S = string
-    val U = unicode
 
     !![Instances[Foo[_]]].apply() should be(
       (> :: b :: HNil) ::
       (> :: f :: HNil) ::
       (> :: i :: HNil) ::
-      (> :: S :: HNil) ::
-      (> :: U :: HNil) ::
+      (> :: s :: HNil) ::
+      (> :: u :: HNil) ::
       (< :: b :: HNil) ::
       (< :: f :: HNil) ::
       (< :: i :: HNil) ::
-      (< :: S :: HNil) ::
-      (< :: U :: HNil) ::
+      (< :: s :: HNil) ::
+      (< :: u :: HNil) ::
       (| :: b :: HNil) ::
       (| :: f :: HNil) ::
       (| :: i :: HNil) ::
-      (| :: S :: HNil) ::
-      (| :: U :: HNil) ::
+      (| :: s :: HNil) ::
+      (| :: u :: HNil) ::
       HNil
     )
+  }
+
+  test("map") {
+    ==(
+      InstanceMap[ByteOrder](),
+      Map(
+        ">" → >,
+        "<" → <,
+        "|" → |
+      )
+    )
+
+    {
+      implicit val show: Show[ByteOrder] =
+        new Show[ByteOrder] {
+          override def show(t: ByteOrder): String =
+            t match {
+              case BigEndian ⇒ "BE"
+              case LittleEndian ⇒ "LE"
+              case None ⇒ "-"
+            }
+        }
+      ==(
+        InstanceMap[ByteOrder](),
+        Map(
+          "BE" → >,
+          "LE" → <,
+           "-" → |
+        )
+      )
+    }
   }
 }
 

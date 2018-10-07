@@ -4,7 +4,7 @@ lazy val `shapeless-utils` =
     .settings(
       v"1.5.1",
       dep(
-        hammerlab.types % "1.4.0",
+        cats,
         shapeless
       )
     )
